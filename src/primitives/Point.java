@@ -61,5 +61,14 @@ public class Point{
          return distance.d1() + distance.d2() + distance.d3();
     }
 
+    /**
+     * function to calculate the distance
+     * @param target a point
+     * @return distance
+     */
+    public double distance(Point target){
+        return distanceSquared(target)*distanceSquared(target);
+    }
+
 
 }
