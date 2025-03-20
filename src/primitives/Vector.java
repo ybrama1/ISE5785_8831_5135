@@ -46,8 +46,7 @@ public class Vector extends Point {
 
     /**
      * scalar multiplication
-     *
-     * @param scalar scalar
+     * @param scalar scalar we multiply the vector by
      * @return new vector
      */
     public Vector scale(double scalar) {
