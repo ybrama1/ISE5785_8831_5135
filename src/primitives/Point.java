@@ -34,9 +34,9 @@ public class Point{
      * @param subtrahend second point
      * @return vector from the second point to the point
      */
-    public Point subtract(Point subtrahend){
+    public Vector subtract(Point subtrahend){
 
-        return new Point(this.xyz.subtract(subtrahend.xyz));
+        return new Vector(this.xyz.subtract(subtrahend.xyz));
     }
 
     /**
