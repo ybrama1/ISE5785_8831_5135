@@ -16,10 +16,8 @@ public class Vector extends Point {
      * @param z third coordinate
      */
     public Vector(double x, double y, double z) {
-        if (new Double3(x, y, z).equals(Double3.ZERO)) {
-            throw new IllegalArgumentException("Vector cannot be (0,0,0)");
-        }
-        super(x, y, z);
+        super(x,y,z);
+        validation();
     }
 
     /**
@@ -28,10 +26,8 @@ public class Vector extends Point {
      * @param xyz 3 coordinates
      */
     public Vector(Double3 xyz) {
-        if (xyz.equals(Double3.ZERO)) {
-            throw new IllegalArgumentException("Vector cannot be (0,0,0)");
-        }
         super(xyz);
+        validation();
     }
 
     /**
@@ -96,6 +92,15 @@ public class Vector extends Point {
      */
     public Vector normalize() {
         return scale(1 / length());
+    }
+
+    /**
+     * validate the vector, throw exception if invalid
+     */
+    private void validation(){
+        if (this.xyz.equals(Double3.ZERO)) {
+            throw new IllegalArgumentException("Vector cannot be (0,0,0)");
+        }
     }
 
 }
