@@ -1,11 +1,17 @@
 package geometries;
 import primitives.*;
 import geometries.Geometry;
-public class Plane {
+
+/**
+ * Class Plane is the basic class representing a plane in a Cartesian
+ * 3-Dimensional coordinate system.
+ * @author Jeshurun and Binyamin
+ */
+public class Plane extends Geometry {
     /**The point on the plane*/
-    private Point q0;
+    private final Point q0;
     /**The normal to the plane*/
-    private Vector normal;
+    private final Vector normal;
     /**
      * constructor creates the plane
      * @param q0 the point on the plane

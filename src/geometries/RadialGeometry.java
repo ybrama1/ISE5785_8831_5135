@@ -6,9 +6,9 @@ import primitives.*;
  * 3-Dimensional coordinate system.
  * @author Jeshurun and Binyamin
  */
-public class RadialGeometry {
+public abstract class RadialGeometry extends Geometry {
     /**The radius of the geometry*/
-    protected double radius;
+    protected final double radius;
     /**
      * constructor
      * @param radius the radius of the geometry

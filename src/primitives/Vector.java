@@ -32,7 +32,6 @@ public class Vector extends Point {
 
     /**
      * add vector to the vector
-     *
      * @param addend the vector
      * @return new vector
      */
@@ -102,6 +101,18 @@ public class Vector extends Point {
         if (this.xyz.equals(Double3.ZERO)) {
             throw new IllegalArgumentException("Vector cannot be (0,0,0)");
         }
+    }
+
+    /**
+     * return whether 2 objects are equals
+     * @param obj the other object
+     * @return whether they are equals
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        return (obj instanceof Vector other)
+                && this.xyz.equals(other.xyz);
     }
 
 }

@@ -6,13 +6,13 @@ package primitives;
  */
 public class Point{
     /**3 coordinates of point*/
-    protected Double3 xyz;
+    protected final Double3 xyz;
 
     /**The beginning of labor */
     public static final Point ZERO = new Point(0,0,0);
 
     /**
-     * constractor creates the point (x,y,z)
+     * constructor creates the point (x,y,z)
      * @param x first coordinate
      * @param y second coordinate
      * @param z third coordinate
@@ -22,7 +22,7 @@ public class Point{
     }
 
     /**
-     * constractor create the point xyz
+     * constructor create the point xyz
      * @param xyz 3 coordinates
      */
     public Point(Double3 xyz){
@@ -68,5 +68,22 @@ public class Point{
         return distanceSquared(target)*distanceSquared(target);
     }
 
+    /**
+     * return whether 2 objects are equals
+     * @param obj the other object
+     * @return whether they are equals
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        return (obj instanceof Point other)
+                && this.xyz.equals(other.xyz);
+    }
+
+
+    @Override
+    public String toString(){
+        return xyz.toString();
+    }
 
 }
