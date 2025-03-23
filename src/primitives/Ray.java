@@ -13,7 +13,7 @@ public class Ray {
     private Vector dir;
 
     /**
-     * constractor creates the ray
+     * constructor creates the ray
      * @param p0 the beginning of the ray
      * @param dir the direction of the ray
      */
