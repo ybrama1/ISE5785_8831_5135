@@ -1,6 +1,4 @@
 package primitives;
-import static primitives.Util.*;
-import primitives.Double3;
 
 /** Class Point is the basic class representing a point of Euclidean geometry in Cartesian
  * 3-Dimensional coordinate system.

@@ -53,4 +53,49 @@ public class Vector extends Point {
         return new Vector(this.xyz.scale(scalar));
     }
 
+    /**
+     * dot product
+     * @param other vector
+     * @return dot product
+     */
+    public double dotProduct(Vector other) {
+        return this.xyz.d1() * other.xyz.d1() + this.xyz.d2() * other.xyz.d2() + this.xyz.d3() * other.xyz.d3();
+    }
+
+    /**
+     * cross product
+     * @param other vector
+     * @return cross product
+     */
+    public Vector crossProduct(Vector other) {
+        return new Vector(
+                this.xyz.d2() * other.xyz.d3() - this.xyz.d3() * other.xyz.d2(),
+                this.xyz.d3() * other.xyz.d1() - this.xyz.d1() * other.xyz.d3(),
+                this.xyz.d1() * other.xyz.d2() - this.xyz.d2() * other.xyz.d1());)
+    }
+
+    /**
+     * squared length
+     * @return squared length
+     */
+    public double lengthSquared() {
+        return this.xyz.d1() * this.xyz.d1() + this.xyz.d2() * this.xyz.d2() + this.xyz.d3() * this.xyz.d3();
+    }
+
+    /**
+     * length
+     * @return length
+     */
+    public double length() {
+        return Math.sqrt(lengthSquared());
+    }
+
+    /**
+     * normalize the vector
+     * @return normalized vector
+     */
+    public Vector normalize() {
+        return scale(1 / length());
+    }
+
 }
