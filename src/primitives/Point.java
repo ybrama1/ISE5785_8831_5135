@@ -76,11 +76,7 @@ public class Point{
         return Math.sqrt(distanceSquared(target));
     }
 
-    /**
-     * return whether 2 objects are equals
-     * @param obj the other object
-     * @return whether they are equals
-     */
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

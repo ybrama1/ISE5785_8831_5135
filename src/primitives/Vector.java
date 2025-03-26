@@ -18,6 +18,7 @@ public class Vector extends Point {
     public Vector(double x, double y, double z) {
         super(x,y,z);
         validation();
+
     }
 
     /**
@@ -103,11 +104,7 @@ public class Vector extends Point {
         }
     }
 
-    /**
-     * return whether 2 objects are equals
-     * @param obj the other object
-     * @return whether they are equals
-     */
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
