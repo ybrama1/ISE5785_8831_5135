@@ -23,11 +23,7 @@ public class Sphere extends RadialGeometry {
         this.center = center;
     }
 
-    /**
-     * calculate the normal to the sphere in the point on it
-     * @param point the point on the sphere
-     * @return the normal to the sphere in the point on it
-     */
+    @Override
     public Vector getNormal(Point point) {
         return null;
     }
