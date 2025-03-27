@@ -31,11 +31,16 @@ public class Plane extends Geometry {
         this.q0 = p1;
         this.normal = null;
     }
+
     /**
-     * function to calculate the normal to the plane
-     * @param point the point on the plane
-     * @return the normal to the plane
+     * normal getter
+     * @return the normal to the geometry
      */
+    public Vector getNormal() {
+        return normal;
+    }
+
+    @Override
     public Vector getNormal(Point point) {
         return normal;
     }
