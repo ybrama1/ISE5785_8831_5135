@@ -22,14 +22,7 @@ class PointTest {
         // =============== Boundary Values Tests ==================
         //TC11: Test for a subtraction of a point from itself
         //the result should be exception
-        try {
-            p1.subtract(p1);
-            fail("ERROR: subtract() for point from itself does not throw an exception");
-        } catch (IllegalArgumentException e) {
-            assertTrue(true);
-        } catch (Exception e) {
-            fail("ERROR: subtract() for point from itself throws wrong exception");
-        }
+        assertThrows( IllegalArgumentException.class, () -> p1.subtract(p1), "ERROR: subtract() for point from itself does not throw an exception");
     }
 
     /** Test method for

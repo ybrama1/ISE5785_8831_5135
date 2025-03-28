@@ -46,11 +46,7 @@ class VectorTest {
         // =============== Boundary Values Tests ==================
         // TC11: Test for a subtraction of a vector from itself
         // the result should be an exception
-        try {
-            v1.subtract(v1);
-            fail("ERROR: subtract() for vector from itself does not throw an exception");
-        } catch (IllegalArgumentException e) {assertTrue(true);}
-        catch (Exception e) {fail("ERROR: subtract() for vector from itself throws wrong exception");}
+        assertThrows( IllegalArgumentException.class, () -> v1.subtract(v1), "ERROR: subtract() for vector from itself does not throw an exception");
     }
 
     /**
@@ -68,11 +64,7 @@ class VectorTest {
         // =============== Boundary Values Tests ==================
         // TC11: Test for a scaling of a vector by zero
         // the result should be an exception
-        try {
-            v.scale(0);
-            fail("ERROR: scale() for zero does not throw an exception");
-        } catch (IllegalArgumentException ignore) {assertTrue(true);}
-        catch(Exception e) {fail("ERROR: scale() for zero throws wrong exception");}
+        assertThrows( IllegalArgumentException.class, () -> v.scale(0), "ERROR: scale() for zero does not throw an exception");
     }
 
     /**
@@ -114,11 +106,7 @@ class VectorTest {
         // =============== Boundary Values Tests ==================
         // TC11: Test for parallel vectors
         // the result should be an exception
-        try {
-            v1.crossProduct(v2);
-            fail("ERROR: crossProduct() for parallel vectors does not throw an exception");
-        } catch (IllegalArgumentException ignore) {}
-        catch (Exception e) {fail("ERROR: crossProduct() for parallel vectors throws wrong exception");}
+        assertThrows( IllegalArgumentException.class, () -> v1.crossProduct(v2), "ERROR: crossProduct() for parallel vectors does not throw an exception");
     }
 
     /**
@@ -162,10 +150,7 @@ class VectorTest {
         // =============== Boundary Values Tests ==================
         // TC11: Test for a zero vector
         // the result should be an exception
-        try {
-            new Vector(0, 0, 0).normalize();
-            fail("ERROR: normalize() for zero vector does not throw an exception");
-        } catch (IllegalArgumentException ignore) {}
+        assertThrows( IllegalArgumentException.class, () -> new Vector(0, 0, 0).normalize(), "ERROR: normalize() for zero vector does not throw an exception");
 
     }
 }
