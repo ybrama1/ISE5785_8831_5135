@@ -1,6 +1,8 @@
 package geometries;
 
+import primitives.Point;
 import primitives.Ray;
+import primitives.Vector;
 
 /**
  * Class Cylinder is the class representing a cylinder in a Cartesian
@@ -21,5 +23,10 @@ public class Cylinder extends Tube {
     public Cylinder(double radius, Ray axis, double height){
         super(radius, axis);
         this.height = height;
+    }
+
+    @Override
+    public Vector getNormal(Point point) {
+        if (point)
     }
 }
