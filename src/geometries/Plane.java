@@ -1,6 +1,5 @@
 package geometries;
 import primitives.*;
-import geometries.Geometry;
 
 /**
  * Class Plane is the basic class representing a plane in a Cartesian
@@ -52,6 +51,6 @@ public class Plane extends Geometry {
 
     @Override
     public Vector getNormal(Point point) {
-        return normal;
+        return getNormal();
     }
 }

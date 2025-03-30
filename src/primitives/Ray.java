@@ -1,6 +1,4 @@
 package primitives;
-import  primitives.Point;
-import primitives.Vector;
 /**
  * Class Ray is the basic class representing a ray in Cartesian
  * 3-Dimensional coordinate system.
@@ -23,10 +21,20 @@ public class Ray {
     }
 
     /**
-     * return whether 2 objects are equals
-     * @param obj the other object
-     * @return whether they are equals
+     * returns the beginning of the ray
+     * @return the beginning of the ray
      */
+    public Point getP0() {
+        return p0;
+    }
+
+    /**
+     * returns the direction of the ray
+     * @return the direction of the ray
+     */
+    public Vector getDir() {
+        return dir;
+    }
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
