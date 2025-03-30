@@ -7,6 +7,10 @@ import primitives.Point;
 import primitives.Vector;
 class TriangleTest {
 
+    /**
+     * Test method for
+     * {@link geometries.Triangle#getNormal(primitives.Point)}.
+     */
     @Test
     void getNormal() {
         // ============ Equivalence Partitions Tests ==============
