@@ -3,6 +3,7 @@ package geometries;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import primitives.Point;
+import primitives.Util;
 import primitives.Vector;
 
 class PlaneTest {
@@ -67,10 +68,10 @@ class PlaneTest {
      */
     @Test
     void testGetNormalPoint() {
-        Plane p = new Plane(new Point(1, 1, 1), new Point(2, 2, 2), new Point(3, 3, 3));
+        Plane p = new Plane(new Point(1, 1, 1), new Point(2, 2, 2), new Point(3, 2, 3));
 
         Vector v1 = new Point(1, 1, 1).subtract(new Point(2, 2, 2));
-        Vector v2 = new Point(1, 1, 1).subtract(new Point(3, 3, 3));
+        Vector v2 = new Point(1, 1, 1).subtract(new Point(3, 2, 3));
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test for a normal orthogonal to 2 vectors in the plane
         // the result should be true
@@ -78,7 +79,7 @@ class PlaneTest {
 
         //TC02: Test if the normal length is 1
         // the result should be 1
-        assertEquals(1, p.getNormal(new Point(1, 1, 1)).length(), "ERROR: getNormal(Point) wrong value");
+        assertEquals(1.0 , Util.alignZero(p.getNormal(new Point(1, 1, 1)).length()),1E-10, "ERROR: getNormal(Point) wrong value");
     }
 
 }
