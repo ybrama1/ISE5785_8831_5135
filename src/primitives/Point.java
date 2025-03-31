@@ -54,17 +54,10 @@ public class Point{
      * @return squared distance
      */
     public double distanceSquared(Point target){
-        try {
+            if (this.equals(target)) return 0;
             Double3 distance = this.subtract(target).xyz;
             distance = distance.product(distance);
             return distance.d1() + distance.d2() + distance.d3();
-        }
-        catch (IllegalArgumentException err) {
-            //if the result of the subtraction is the zero vector, returns distance of 0
-            if (err.getLocalizedMessage().equals("Vector cannot be (0,0,0)"))
-                return 0;
-            throw err;
-        }
     }
 
     /**

@@ -95,8 +95,8 @@ public class Vector extends Point {
     }
 
     /**
-     * validate the vector
-     * throw exception if invalid
+     * validation of the vector
+     * throw exception if the vector is (0,0,0)
      */
     private void validation(){
         if (this.xyz.equals(Double3.ZERO)) {
