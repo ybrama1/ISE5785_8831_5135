@@ -1,6 +1,8 @@
 package geometries;
 import primitives.*;
 
+import java.util.List;
+
 /**
  * Class Plane is the basic class representing a plane in a Cartesian
  * 3-Dimensional coordinate system.
@@ -52,5 +54,10 @@ public class Plane extends Geometry {
     @Override
     public Vector getNormal(Point point) {
         return getNormal();
+    }
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
     }
 }

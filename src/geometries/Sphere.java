@@ -1,7 +1,10 @@
 package geometries;
 
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 /**
  * Class Sphere is the class representing a sphere in a Cartesian
@@ -28,5 +31,9 @@ public class Sphere extends RadialGeometry {
         // The normal of a sphere is the vector from the center to the point on the sphere
         Vector normal = point.subtract(center);
         return normal.normalize();
+    }
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
     }
 }

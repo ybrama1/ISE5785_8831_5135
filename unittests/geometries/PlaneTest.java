@@ -3,6 +3,7 @@ package geometries;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Util;
 import primitives.Vector;
 
@@ -82,4 +83,54 @@ class PlaneTest {
         assertEquals(1.0 , Util.alignZero(p.getNormal(new Point(1, 1, 1)).length()),1E-10, "ERROR: getNormal(Point) wrong value");
     }
 
+    /**
+     * Test method for
+     * {@link geometries.Plane#findIntersections(primitives.Ray)}.
+     */
+    @Test
+    void findIntersections() {
+        Plane p = new Plane(new Point(1, 0,0), new Point(0,1,0), new Point(0,0,0));
+        Point p100 = new Point(1, 0, 0);
+        Point p010 = new Point(0, 1, 0);
+        Point p001 = new Point(0, 0, 1);
+        // ============ Equivalence Partitions Tests ==============
+        // TC01: Ray's line is outside the plane (0 points)
+        Ray r1 = new Ray(p001, new Vector(1, 1, 1));
+        assertNull(p.findIntersections(r1), "Ray's line out of plane");
+
+        // TC02: Ray starts before and crosses the plane (1 point)
+        Ray r2 = new Ray(p001, new Vector(-1,-1,-1));
+        assertNotNull(p.findIntersections(r2), "Ray's line crosses plane");
+        assertEquals(1, p.findIntersections(r2).size(), "Wrong number of points");
+
+        // =========== Boundary Values Tests ==================
+        // group 1: the ray in parallel to the plane
+        // TC11: The ray is outside the plane (0 points)
+        Ray r3 = new Ray(p001, new Vector(1, 1, 0));
+        assertNull(p.findIntersections(r3), "Ray's line out of plane");
+        // TC12: The ray is in the plane (0 points)
+        Ray r4 = new Ray(p100, new Vector(0, 1, 0));
+        assertNull(p.findIntersections(r4), "Ray's line in plane");
+        // group 2: the ray is orthogonal to the plane
+        // TC13: The ray starts at the plane (1 point)
+        Ray r5 = new Ray(p100, new Vector(0, 0, 1));
+        assertNotNull(p.findIntersections(r5), "Ray's line in plane");
+        assertEquals(1, p.findIntersections(r5).size(), "Wrong number of points");
+        assertEquals(p100, p.findIntersections(r5).getFirst(), "Wrong point");
+        // TC14: The ray starts before the plane (1 point)
+        Ray r6 = new Ray(new Point(1,0,-1), new Vector(0, 0, 1));
+        assertNotNull(p.findIntersections(r6), "Ray's line in plane");
+        assertEquals(1, p.findIntersections(r6).size(), "Wrong number of points");
+        assertEquals(new Point(1, 0, 0), p.findIntersections(r6).getFirst(), "Wrong point");
+        // TC15: The ray starts after the plane (0 points)
+        Ray r7 = new Ray(new Point(1,0,1), new Vector(0, 0, 1));
+        assertNull(p.findIntersections(r7), "Ray's line out of plane");
+        // group 3: the ray is in the plane
+        // TC16: The ray starts at the plane (0 points)
+        Ray r8 = new Ray(p100, new Vector(0, 1, 1));
+        assertNull(p.findIntersections(r8), "Ray's line in plane");
+        // TC17: The ray starts in the plane at the spacial point (0 points)
+        Ray r9 = new Ray(new Point(1, 0, 0), new Vector(1, 1, 1));
+        assertNull(p.findIntersections(r9), "Ray's line in plane");
+    }
 }
