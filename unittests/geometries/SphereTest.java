@@ -96,14 +96,21 @@ class SphereTest {
         assertEquals(1, result9.size(), "Wrong number of points");
         assertEquals(List.of(new Point(2,0,0)), result9, "Wrong points");
         // TC25: Ray starts at sphere and goes outside (0 points)
-
+        final var result10 = sphere.findIntersections(new Ray(new Point(0,0,0), v110));
+        assertNull(result10, "Ray's line out of sphere");
         // TC26: Ray starts after sphere (0 points)
+        final var result11 = sphere.findIntersections(new Ray(new Point(3,0,0), v110));
         // **** Group 3: Ray's line is tangent to the sphere (all tests 0 points)
         // TC31: Ray starts before the tangent point
+        final var result12 = sphere.findIntersections(new Ray(p001, v100));
         // TC32: Ray starts at the tangent point
+        final var result13 = sphere.findIntersections(new Ray(new Point(1, 0, 1), v100));
         // TC33: Ray starts after the tangent point
+        final var result14 = sphere.findIntersections(new Ray(new Point(2, 0, 1), v100));
+        assertNull(result12, "Ray's line out of sphere");
         // **** Group 4: Special cases
         // TC41: Ray's line is outside sphere, ray is orthogonal to ray start to sphere's center line
+
         // TC42: Ray's starts inside, ray is orthogonal to ray start to sphere's center line
     }
 }
