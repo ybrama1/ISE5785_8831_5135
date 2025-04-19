@@ -4,6 +4,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * Class Tube is the class representing a Tube(infinity cylinder) in Cartesian
  * 3-Dimensional coordinate system.
@@ -24,6 +26,12 @@ public class Tube extends RadialGeometry {
         this.axis = axis;
     }
 
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        // The tube is infinite, so we need to find the intersection of the ray with the axis
+        // and then check if the point is within the radius of the tube
+        return null;
+    }
     @Override
     public Vector getNormal(Point point) {
         // The normal of a tube is the vector from the axis to the point on the tube

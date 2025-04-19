@@ -2,6 +2,7 @@ package geometries;
 
 import primitives.Point;
 import primitives.Ray;
+import primitives.Util;
 import primitives.Vector;
 
 import java.util.List;
@@ -34,6 +35,49 @@ public class Sphere extends RadialGeometry {
     }
     @Override
     public List<Point> findIntersections(Ray ray) {
-        return null;
+        Point p0 = ray.getP0();
+        Vector dir = ray.getDir();
+
+        if (p0.equals(center)) {
+            // The ray starts at the center of the sphere
+            return List.of(p0.add(dir.scale(radius)));
+        }
+        Vector L = center.subtract(p0);
+        double lengthL = L.length();
+
+        double b = dir.dotProduct(L)*dir.dotProduct(L);
+        double c = lengthL * lengthL - radius * radius;
+        double discriminant = b * b - 4 * c;
+
+        if (discriminant < 0) {
+            // No intersection
+            return null;
+        } else if (Util.isZero(discriminant)) {
+            // One intersection
+            double t = -b / (2 * c);
+            if (t < 0) {
+                // The intersection is behind the ray
+                return null;
+            }
+            return List.of(p0.add(dir.scale(t)));
+        } else {
+            // Two intersections
+            double t1 = (-b + Math.sqrt(discriminant)) / (2);
+            double t2 = (-b - Math.sqrt(discriminant)) / (2);
+            if (t1 < 0 && t2 < 0) {
+                // Both intersections are behind the ray
+                return null;
+            }
+            else if (t1 < 0) {
+                // Only t2 is valid
+                return List.of(p0.add(dir.scale(t2)));
+            }
+            else if (t2 < 0) {
+                // Only t1 is valid
+                return List.of(p0.add(dir.scale(t1)));
+            }
+            return List.of(p0.add(dir.scale(t1)), p0.add(dir.scale(t2)));
+        }
     }
+
 }
