@@ -73,7 +73,7 @@ public class Plane extends Geometry {
             return null; // The intersection point is behind the ray's origin
         }
         // Calculate the intersection point
-        Point intersectionPoint = ray.getP0().add(ray.getDir().scale(t));
+        Point intersectionPoint = ray.getPoint(t);
         return List.of(intersectionPoint);
     }
 }

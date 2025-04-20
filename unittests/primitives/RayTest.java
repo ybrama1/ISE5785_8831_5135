@@ -29,4 +29,26 @@ class RayTest {
         //the result should be false
         assertNotEquals(r1, r4, "ERROR: equals() wrong value");
     }
+
+    /**
+     * Test method for
+     * {@link primitives.Ray#getPoint(double)}.
+     */
+    @Test
+    void testGetPoint() {
+        // ============ Equivalence Partitions Tests ==============
+        Ray r1 = new Ray(new Point(1, 2, 3), new Vector(1, 0, 0));
+        // TC01: Test for positive distance
+        // the result should be (2,2,3)
+        assertEquals(new Point(2, 2, 3), r1.getPoint(1), "ERROR: getPoint() wrong value");
+        // TC02: Test for negative distance
+        // the result should be exception
+        assertThrows(IllegalArgumentException.class, () -> r1.getPoint(-1), "ERROR: getPoint() for negative distance does not throw an exception");
+
+        // =========== Boundary Values Tests ==================
+        // TC10: Test for zero distance
+        // the result should be (1,2,3)
+        assertEquals(new Point(1, 2, 3), r1.getPoint(0), "ERROR: getPoint() for zero distance does not throw an exception");
+    }
+
 }

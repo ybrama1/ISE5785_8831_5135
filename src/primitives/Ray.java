@@ -35,6 +35,22 @@ public class Ray {
     public Vector getDir() {
         return dir;
     }
+
+    /**
+     * returns the point on the ray at distance t from the beginning of the ray
+     * @param t the distance from the beginning of the ray
+     * @return the point on the ray at distance t from the beginning of the ray
+     */
+    public Point getPoint(double t) {
+        if (t < 0) {
+            throw new IllegalArgumentException("Distance cannot be negative");
+        }
+        if (Util.isZero(t)) {
+            return p0;
+        }
+        return p0.add(dir.scale(t));
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -42,4 +58,5 @@ public class Ray {
                 && this.p0.equals(other.p0)
                 && this.dir.equals(other.dir);
     }
+
 }
