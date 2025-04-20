@@ -1,9 +1,7 @@
 package geometries;
 
 import org.junit.jupiter.api.Test;
-import primitives.Point;
-import primitives.Ray;
-import primitives.Vector;
+import primitives.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +12,7 @@ class GeometriesTest {
     void testGeometries() {
         // =============== Boundary Values Tests ==================
         // TC11: Test for a constructor with an empty list
-        Geometries g1 = new Geometries(new java.util.LinkedList<>());
+        Geometries g1 = new Geometries();
         assertNotNull(g1, "ERROR: Geometries() wrong value");
 
     }
@@ -24,36 +22,31 @@ class GeometriesTest {
 
     @Test
     void findIntersections() {
+        Ray ray = new Ray(new Point(0, 0, 0), new Vector(1, 0,0));
+        Sphere sphere1 = new Sphere(1, new Point(3, 0,0)); // 2 intersections
+        Sphere sphere2 = new Sphere(1, new Point(0,10,0)); // 0 intersections
+        Triangle triangle1 = new Triangle(new Point(2, -1, 1), new Point(2, -1, -1), new Point(2, 1, 0)); // 1 intersection
+        Triangle triangle2 = new Triangle(new Point(0,5,0), new Point(1,5,1), new Point(3, 5, 1)); // 0 intersections
+        Plane plane1 = new Plane(new Point(10, 0, 0), new Vector(1,0,0)); // 1 intersections
+        Plane plane2 = new Plane(new Point(-1, 0, 0), new Vector(1, 0, 0)); // 0 intersection
         // ============ Equivalence Partitions Tests ==============
-        // TC01: some intersections, but not in all geometries
-        Plane p = new Plane(new Point(0, 0, 0), new Point(1, 0, 0), new Point(0, 1, 0));
-        Sphere s = new Sphere(1, new Point(0, 0, 0));
-        Tube t = new Tube(1, new Ray(new Point(0, 0, 0), new Vector(1, 0, 0)));
-        Geometries g = new Geometries(new java.util.LinkedList<>());
-        g.add(p);
-        g.add(s);
-        g.add(t);
-        Ray r = new Ray(new Point(0, 1, -1), new Vector(1, 0, 1));
-        assertEquals(2, g.findIntersections(r).size(), "ERROR: findIntersections() wrong value");
+        // TC01: Test for some shapes that intersect with the ray and some that don't
+        Geometries geometries = new Geometries(sphere1, sphere2, triangle1, triangle2, plane1, plane2);
+        assertEquals(4, geometries.findIntersections(ray).size(), "ERROR: findIntersections() wrong value");
 
         // =============== Boundary Values Tests ==================
-        Plane p1 = new Plane(new Point(0, 0, 0), new Point(1, 0, 0), new Point(0, 1, 0));
-        Tube t1 = new Tube(1, new Ray(new Point(0, 0, 0), new Vector(1, 0, 0)));
-        // TC11: Test for a list with no intersections
-        // the result should be an empty list
-        Geometries g1 = new Geometries(new java.util.LinkedList<>());
-        g1.add(p1);
-        g1.add(t1);
-        Ray r1 = new Ray(new Point(0, 0, 0), new Vector(1, 1, 1));
-        assertNull(g1.findIntersections(r1), "ERROR: findIntersections() wrong value");
-        // TC12: Test for a list with one intersection
-        // the result should be 1
-        Ray r2 = new Ray(new Point(0, 1, -1), new Vector(1, 0, 1));
-        assertEquals(1, g1.findIntersections(r2).size(), "ERROR: findIntersections() wrong value");
+        // TC11: Test for an empty list
+        Geometries geometries1 = new Geometries();
+        assertNull(geometries1.findIntersections(ray), "ERROR: findIntersections() wrong value");
+        // TC12: Test for a list with one shape that intersects with the ray
+        Geometries geometries2 = new Geometries(sphere2, triangle1, plane2);
+        assertEquals(1, geometries2.findIntersections(ray).size(), "ERROR: findIntersections() wrong value");
+        // TC13: Test for a list with no shapes that intersect with the ray
+        Geometries geometries3 = new Geometries(sphere2, triangle2, plane2);
+        assertNull(geometries3.findIntersections(ray), "ERROR: findIntersections() wrong value");
+        // TC14: Test for a list with all shapes that intersect with the ray
+        Geometries geometries4 = new Geometries(sphere1, triangle1, plane1);
+        assertEquals(4, geometries4.findIntersections(ray).size(), "ERROR: findIntersections() wrong value");
 
-        // TC13: all shapes intersect
-        // the result should be 3
-        Ray r3 = new Ray(new Point(0, 1, -1), new Vector(1, 0, 0));
-        assertEquals(3, g1.findIntersections(r3).size(), "ERROR: findIntersections() wrong value");
     }
 }

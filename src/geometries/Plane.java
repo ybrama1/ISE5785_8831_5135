@@ -74,9 +74,6 @@ public class Plane extends Geometry {
         }
         // Calculate the intersection point
         Point intersectionPoint = ray.getP0().add(ray.getDir().scale(t));
-        if (intersectionPoint.equals(q0)) {
-            return null; // The intersection point is the same as the point on the plane
-        }
         return List.of(intersectionPoint);
     }
 }

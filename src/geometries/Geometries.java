@@ -23,16 +23,18 @@ public class Geometries {
      * Constructor
      * @param geometries the list of geometries
      */
-    public Geometries(List<Intersectable> geometries) {
-        this.geometries.addAll(geometries);
+    public Geometries (Intersectable... geometries) {
+        add(geometries);
     }
 
     /**
      * Method to add a geometry to the list
      * @param geometry the geometry to add
      */
-    public void add(Intersectable geometry) {
-        geometries.add(geometry);
+    public void add(Intersectable... geometry) {
+        for (Intersectable g : geometry) {
+            this.geometries.add(g);
+        }
     }
 
     /**
@@ -42,9 +44,7 @@ public class Geometries {
      */
     public List<Point> findIntersections(Ray ray) {
         List<Point> intersections = new ArrayList<>();
-        if (geometries.isEmpty()) {
-            return null;
-        }
+
         for (Intersectable geometry : geometries) {
             List<Point> geometryIntersections = geometry.findIntersections(ray);
             if (geometryIntersections != null) {
@@ -53,5 +53,4 @@ public class Geometries {
         }
         return intersections.isEmpty() ? null : intersections;
     }
-
 }

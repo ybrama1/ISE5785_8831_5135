@@ -7,6 +7,8 @@ import primitives.Ray;
 import primitives.Util;
 import primitives.Vector;
 
+import java.util.List;
+
 class PlaneTest {
 
     /**
@@ -115,9 +117,11 @@ class PlaneTest {
         // TC13: The ray starts at the plane (0 points)
         Ray r5 = new Ray(p100, new Vector(0, 0, 1));
         assertNull( p.findIntersections(r5), "Ray's line in plane");
-        // TC14: The ray starts before the plane (0 points)
+        // TC14: The ray starts before the plane (1 point)
         Ray r6 = new Ray(new Point(1,0,-1), new Vector(0, 0, 1));
-        assertNull(p.findIntersections(r6), "Ray's line out of plane");
+        assertNotNull(p.findIntersections(r6), "Ray's line crosses plane");
+        assertEquals(1, p.findIntersections(r6).size(), "Wrong number of points");
+        assertEquals(List.of(new Point (1, 0, 0)), p.findIntersections(r6), "Ray's line crosses plane");
         // TC15: The ray starts after the plane (0 points)
         Ray r7 = new Ray(new Point(1,0,1), new Vector(0, 0, 1));
         assertNull(p.findIntersections(r7), "Ray's line out of plane");
