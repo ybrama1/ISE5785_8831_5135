@@ -31,15 +31,9 @@ public class Plane extends Geometry {
     public Plane(Point p1, Point p2, Point p3) {
         this.q0 = p1;
         // Calculate the normal using the cross product of two vectors on the plane
-        if (p1.equals(p2) || p1.equals(p3) || p2.equals(p3)) {
-            throw new IllegalArgumentException("Points must be distinct");
-        }
         // the points should not be on the same line
         Vector v1 = p2.subtract(p1);
         Vector v2 = p3.subtract(p1);
-        if(v1.dotProduct(v2) == v1.length()*v2.length()){
-            throw new IllegalArgumentException("Points must not be on the same line");
-        }
         this.normal = v1.crossProduct(v2).normalize();
     }
 

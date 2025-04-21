@@ -17,31 +17,66 @@ class PlaneTest {
      */
     @Test
     void Plane() {
-        Plane p = new Plane(new Point(1, 1, 1), new Point(2, 2, 2), new Point(3, 2,3));
+        Plane p = new Plane(
+                new Point(1, 1, 1),
+                new Point(2, 2, 2),
+                new Point(3, 2,3));
 
         Vector v1 = new Point(1, 1, 1).subtract(new Point(2, 2, 2));
         Vector v2 = new Point(1, 1, 1).subtract(new Point(3, 2, 3));
         // ============ Equivalence Partitions Tests ==============
         // TC01: Test for a normal orthogonal to 2 vectors in the plane
         // the result should be true
-        assertTrue(p.getNormal().dotProduct(v1) == 0 && p.getNormal().dotProduct(v2) == 0, "ERROR: Plane() wrong value");
+        assertTrue(
+                p.getNormal().dotProduct(v1) == 0 && p.getNormal().dotProduct(v2) == 0,
+                "ERROR: Plane() wrong value");
 
         // =============== Boundary Values Tests ==================
         // TC11: The first point is the same as the second point
         // the result should be exception
-        assertThrows(IllegalArgumentException.class, () -> new Plane(new Point(1, 1, 1), new Point(1, 1, 1), new Point(3, 2, 3)), "ERROR: Plane() for the same points does not throw an exception");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Plane(
+                        new Point(1, 1, 1),
+                        new Point(1, 1, 1),
+                        new Point(3, 2, 3)),
+                "ERROR: Plane() for the same points does not throw an exception");
         // TC12: The first point is the same as the third point
         // the result should be exception
-        assertThrows(IllegalArgumentException.class, () -> new Plane(new Point(1, 1, 1), new Point(2, 2, 2), new Point(1, 1, 1)), "ERROR: Plane() for the same points does not throw an exception");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Plane(
+                        new Point(1, 1, 1),
+                        new Point(2, 2, 2),
+                        new Point(1, 1, 1)),
+                "ERROR: Plane() for the same points does not throw an exception");
         // TC13: The second point is the same as the third point
         // the result should be exception
-        assertThrows(IllegalArgumentException.class, () -> new Plane(new Point(1, 1, 1), new Point(2, 2, 2), new Point(2, 2, 2)), "ERROR: Plane() for the same points does not throw an exception");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Plane(
+                        new Point(1, 1, 1),
+                        new Point(2, 2, 2),
+                        new Point(2, 2, 2)),
+                "ERROR: Plane() for the same points does not throw an exception");
         // TC14: The points are identical
         // the result should be exception
-        assertThrows(IllegalArgumentException.class, () -> new Plane(new Point(1, 1, 1), new Point(1, 1, 1), new Point(1, 1, 1)), "ERROR: Plane() for the same points does not throw an exception");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Plane(
+                        new Point(1, 1, 1),
+                        new Point(1, 1, 1),
+                        new Point(1, 1, 1)),
+                "ERROR: Plane() for the same points does not throw an exception");
         // TC15: The points are on the same line
         // the result should be exception
-        assertThrows(IllegalArgumentException.class, () -> new Plane(new Point(1, 1, 1), new Point(2, 2, 2), new Point(3, 3, 3)), "ERROR: Plane() for points on the same line does not throw an exception");
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Plane(
+                        new Point(1, 1, 1),
+                        new Point(2, 2, 2),
+                        new Point(3, 3, 3)),
+                "ERROR: Plane() for points on the same line does not throw an exception");
     }
 
 

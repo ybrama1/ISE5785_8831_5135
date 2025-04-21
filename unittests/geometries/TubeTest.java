@@ -18,11 +18,17 @@ class TubeTest {
         Tube t = new Tube(1, new Ray(new Point(0,0,0), new Vector(1,0,0)));
         // TC01: Test for a normal to the tube
         // the result should be true
-        assertTrue(t.getNormal(new Point(1,0,1)).equals(new Vector(0, 0, 1).normalize()), "ERROR: getNormal() wrong value");
+        assertEquals(
+                t.getNormal(new Point(1, 0, 1)),
+                new Vector(0, 0, 1).normalize(),
+                "ERROR: getNormal() wrong value");
 
         // =============== Boundary Values Tests ==================
         // TC11: Test for a normal to the tube in the opposite direction
         // the result should be true
-        assertTrue(t.getNormal(new Point(0,0,1)).equals(new Vector(0,0,1).normalize()), "ERROR: getNormal() wrong value");
+        assertEquals(
+                t.getNormal(new Point(0, 0, 1)),
+                new Vector(0, 0, 1).normalize(),
+                "ERROR: getNormal() wrong value");
     }
 }
