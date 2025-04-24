@@ -7,7 +7,7 @@ import primitives.Point;
 
 import java.util.MissingResourceException;
 
-public class Camera implements Cloneable{
+public class Camera implements Cloneable {
     /*** The camera's position in 3D space.*/
     private Point location;
 
@@ -30,7 +30,7 @@ public class Camera implements Cloneable{
     private Camera(){}
 
 
-    public Builder getBuilder() {
+    public static Builder getBuilder() {
         return new Builder();
     }
 
@@ -38,10 +38,12 @@ public class Camera implements Cloneable{
         return null;
     }
 
-    public static class Builder{
+    public static class Builder {
         private final Camera camera = new Camera();
+
         /**
          * Sets the camera's location.
+         *
          * @param location the camera's location
          * @return the builder instance
          */
@@ -49,8 +51,10 @@ public class Camera implements Cloneable{
             camera.location = location;
             return this;
         }
+
         /**
          * Sets the camera's view direction.
+         *
          * @param vto the camera's view direction
          * @param vup the camera's up direction
          * @return the builder instance
@@ -68,8 +72,9 @@ public class Camera implements Cloneable{
 
         /**
          * Sets the camera's view direction.
+         *
          * @param target the target point
-         * @param up the up direction
+         * @param up     the up direction
          * @return the builder instance
          */
         public Builder setDirection(Point target, Point up) {
@@ -81,6 +86,7 @@ public class Camera implements Cloneable{
 
         /**
          * Sets the camera's view direction. the up direction is the default up direction (0,1,0)
+         *
          * @param target the target point
          * @return the builder instance
          */
@@ -94,7 +100,8 @@ public class Camera implements Cloneable{
 
         /**
          * Sets the camera's view plane size.
-         * @param width the width of the view plane
+         *
+         * @param width  the width of the view plane
          * @param height the height of the view plane
          * @return the builder instance
          */
@@ -109,6 +116,7 @@ public class Camera implements Cloneable{
 
         /**
          * Sets the camera's distance from the view plane.
+         *
          * @param distance the distance from the camera to the view plane
          * @return the builder instance
          */
@@ -122,6 +130,7 @@ public class Camera implements Cloneable{
 
         /**
          * Sets the camera's resolution.
+         *
          * @param nX the number of pixels in the x direction
          * @param nY the number of pixels in the y direction
          * @return copy of the builder instance
@@ -185,8 +194,11 @@ public class Camera implements Cloneable{
             }
 
             camera.vright = camera.vto.crossProduct(camera.vup).normalize();
-            return camera;
+            try {
+                return (Camera)camera.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
-
 }

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import primitives.*;
 
+import java.util.List;
+
 /**
  * Testing Polygons
  * @author Dan
