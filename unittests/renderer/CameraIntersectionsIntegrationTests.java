@@ -9,6 +9,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /** * CameraIntersectionsIntegrationTests is a class that contains integration tests for the Camera class.
@@ -42,7 +44,6 @@ public class CameraIntersectionsIntegrationTests {
     private final Camera camera = cameraBuilder
             .setDirection(to, up)
             .setVpSize(width, height)
-            .setResolution(nX, nY)
             .build();
 //    // the location of the pixels on the view plane
 //    private final Point[][] pixels = {
@@ -67,13 +68,17 @@ public class CameraIntersectionsIntegrationTests {
                 // construct a ray through the pixel
                 Ray ray = camera.constructRay(nX, nY, i, j);
                 // check if the ray intersects with the sphere
-                if (sphere.findIntersections(ray).size() > 0) {
-                    intersectionCount++;
+                List<Point> intersections = sphere.findIntersections(ray);
+                if (intersections != null) {
+                    intersectionCount += intersections.size();
                 }
             }
         }
         // check if the number of intersections is equal to 4
-        assertEquals(4, intersectionCount, "The number of intersections is not equal to 4");
+        assertEquals(
+                4,
+                intersectionCount,
+                "The number of intersections is not equal to 4");
     }
     /**
      * Test method for constructing rays and checking intersections with a plane.
@@ -82,7 +87,6 @@ public class CameraIntersectionsIntegrationTests {
     @Test
     void testIntersectionsPlane() {
         //test for plane
-        //there should be 9 intersections
         Plane plane = new Plane(new Point(0, 6, 0), new Point(1,6,0), new Point(0,7,-1));
         // construct a ray through each pixel and check intersections
         //There should be 6 intersections
@@ -92,13 +96,17 @@ public class CameraIntersectionsIntegrationTests {
                 // construct a ray through the pixel
                 Ray ray = camera.constructRay(nX, nY, i, j);
                 // check if the ray intersects with the plane
-                if (plane.findIntersections(ray).size() > 0) {
-                    intersectionCount++;
+                List<Point> intersections = plane.findIntersections(ray);
+                if (intersections != null) {
+                    intersectionCount += intersections.size();
                 }
             }
         }
         // check if the number of intersections is equal to 6
-        assertEquals(6, intersectionCount, "The number of intersections is not equal to 9");
+        assertEquals(
+                6,
+                intersectionCount,
+                "The number of intersections is not equal to 9");
     }
 
     /**
@@ -108,7 +116,6 @@ public class CameraIntersectionsIntegrationTests {
     @Test
     void testIntersectionsTriangle() {
         //test for triangle
-        //there should be 9 intersections
         Triangle triangle = new Triangle(new Point(4, 3, 4), new Point(-4, 6, 4), new Point(0, 3, -5));
         // construct a ray through each pixel and check intersections
         //There should be 4 intersections
@@ -118,13 +125,16 @@ public class CameraIntersectionsIntegrationTests {
                 // construct a ray through the pixel
                 Ray ray = camera.constructRay(nX, nY, i, j);
                 // check if the ray intersects with the triangle
-                if (triangle.findIntersections(ray).size() > 0) {
-                    intersectionCount++;
+                List<Point> intersections = triangle.findIntersections(ray);
+                if (intersections != null) {
+                    intersectionCount += intersections.size();
                 }
             }
         }
         // check if the number of intersections is equal to 4
-        assertEquals(4, intersectionCount, "The number of intersections is not equal to 9");
+        assertEquals(4,
+                intersectionCount,
+                "The number of intersections is not equal to 9");
     }
 
 
