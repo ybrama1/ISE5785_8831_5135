@@ -29,8 +29,6 @@ public class CameraIntersectionsIntegrationTests {
     private final Camera.Builder cameraBuilder = Camera.getBuilder()
             .setLocation(CAMERA_LOCATION)
             .setVpDistance(CAMERA_DISTANCE);
-    /** Assert failure message for a bad ray */
-    private final String BAD_RAY = "Bad ray";
     // set the camera direction
     private final Vector to = new Vector(0, 1, 0);
     private final Vector up = new Vector(0, 0, 1);

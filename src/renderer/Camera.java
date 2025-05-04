@@ -1,7 +1,6 @@
 package renderer;
 
 import primitives.Ray;
-import primitives.Util;
 import primitives.Vector;
 import primitives.Point;
 
