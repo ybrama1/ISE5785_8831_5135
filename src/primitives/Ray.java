@@ -42,9 +42,6 @@ public class Ray {
      * @return the point on the ray at distance t from the beginning of the ray
      */
     public Point getPoint(double t) {
-        if (t < 0) {
-            throw new IllegalArgumentException("Distance cannot be negative");
-        }
         if (Util.isZero(t)) {
             return p0;
         }
