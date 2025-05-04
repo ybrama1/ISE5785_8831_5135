@@ -46,7 +46,8 @@ class GeometriesTest {
                 triangle1,
                 triangle2,
                 plane1,
-                plane2);
+                plane2
+        );
         assertEquals(
                 4,
                 geometries.findIntersections(ray).size(),

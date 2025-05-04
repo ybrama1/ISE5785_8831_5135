@@ -4,6 +4,7 @@ import primitives.Ray;
 import primitives.Point;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Geometries {
@@ -32,9 +33,7 @@ public class Geometries {
      * @param geometry the geometry to add
      */
     public void add(Intersectable... geometry) {
-        for (Intersectable g : geometry) {
-            this.geometries.add(g);
-        }
+        this.geometries.addAll(Arrays.asList(geometry));
     }
 
     /**

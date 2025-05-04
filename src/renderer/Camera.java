@@ -7,10 +7,11 @@ import primitives.Point;
 
 import java.util.MissingResourceException;
 
+import static primitives.Util.isZero;
+
 public class Camera implements Cloneable {
     /*** The camera's position in 3D space.*/
     private Point location;
-
     /*** The camera's orientation in 3D space.*/
     private Vector vup;
     /*** The camera's view direction in 3D space.*/
@@ -34,10 +35,43 @@ public class Camera implements Cloneable {
         return new Builder();
     }
 
+
+    /**
+     * Constructs a ray from the camera through a pixel on the view plane.
+     *
+     * @param nX the number of pixels in the x direction
+     * @param nY the number of pixels in the y direction
+     * @param j  the pixel's column index
+     * @param i  the pixel's row index
+     * @return a ray from the camera through the specified pixel
+     */
     public Ray constructRay(int nX, int nY, int j, int i){
-        return null;
+        // check if the pixel coordinates are valid
+        if(nX <= 0 || nY <= 0)
+            throw new IllegalArgumentException("Invalid pixel coordinates");
+
+        Point pIJ = Point.ZERO;
+
+        // calculate the pixel size
+        double yI = -(i - (nY - 1) / 2d) * height / nY;
+        double xJ = (j - (nX - 1) / 2d) * width / nX;
+
+        //check if xJ or yI are not zero, so we will not add zero vector
+        if (!isZero(xJ)) pIJ = pIJ.add(vright.scale(xJ));
+        if (!isZero(yI)) pIJ = pIJ.add(vup.scale(yI));
+
+        // we need to move the point in the direction of vTo by distance
+        pIJ = pIJ.add(vto.scale(distance));
+
+        return new Ray(Point.ZERO, pIJ.subtract(Point.ZERO).normalize());
     }
 
+
+    /**
+     * Builder class for constructing a Camera object.
+     * This class provides methods to set the camera's location, view direction,
+     * view plane size, and distance from the view plane.
+     */
     public static class Builder {
         private final Camera camera = new Camera();
 
@@ -159,25 +193,25 @@ public class Camera implements Cloneable {
                         "Camera",
                         "vup");
             }
-            if (Util.isZero(camera.vup.lengthSquared())) {
+            if (isZero(camera.vup.lengthSquared())) {
                 throw new MissingResourceException(
                         errorMessage,
                         "Camera",
                         "width");
             }
-            if (Util.isZero(camera.height)) {
+            if (isZero(camera.height)) {
                 throw new MissingResourceException(
                         errorMessage,
                         "Camera",
                         "height");
             }
-            if (Util.isZero(camera.distance)) {
+            if (isZero(camera.distance)) {
                 throw new MissingResourceException(
                         errorMessage,
                         "Camera",
                         "distance");
             }
-            if (Util.isZero(camera.width)) {
+            if (isZero(camera.width)) {
                 throw new MissingResourceException(
                         errorMessage,
                         "Camera",
