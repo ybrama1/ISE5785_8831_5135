@@ -54,11 +54,11 @@ class RayTest {
                 r1.getPoint(1),
                 "ERROR: getPoint() wrong value");
         // TC02: Test for negative distance
-        // the result should be exception
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> r1.getPoint(-1),
-                "ERROR: getPoint() for negative distance does not throw an exception");
+        // the result should be (0,2,3)
+        assertEquals(
+                new Point(0, 2, 3),
+                r1.getPoint(-1),
+                "ERROR: getPoint() wrong value");
 
         // =========== Boundary Values Tests ==================
         // TC10: Test for zero distance

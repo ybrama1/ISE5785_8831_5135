@@ -43,19 +43,20 @@ public class Sphere extends RadialGeometry {
             // The ray starts at the center of the sphere
             return List.of(p0.add(dir.scale(radius)));
         }
-        Vector u = center.subtract(p0);
+        Vector u = center.subtract(p0); // vector from p0 to the center
+        // The distance from p0 to the point that creates right angled triangle with the center, we'ill mark the point as p1
         double tm = dir.dotProduct(u);
 
-        double d = Math.sqrt(u.dotProduct(u) - tm * tm);
+        double d = Math.sqrt(u.dotProduct(u) - tm * tm); // The distance from the center to p1
 
         if (d >= radius) {
-            // The ray does not intersect the sphere
+            // The ray is outside the sphere
             return null;
         }
 
-        double th = Math.sqrt(radius * radius - d * d);
-        double t1 = Util.alignZero( tm - th);
-        double t2 = Util.alignZero(tm + th);
+        double th = Math.sqrt(radius * radius - d * d); //The distance from p1 to intersections on the line of the ray
+        double t1 = Util.alignZero( tm - th); // The distance from the head of the ray to the closer intersection
+        double t2 = Util.alignZero(tm + th); // The distance from the head of the ray to the further intersection
 
         List<Point> intersections = new ArrayList<>();
         if (t1 > 0) {

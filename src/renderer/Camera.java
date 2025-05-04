@@ -111,9 +111,9 @@ public class Camera implements Cloneable {
          * @param up     the up direction
          * @return the builder instance
          */
-        public Builder setDirection(Point target, Point up) {
+        public Builder setDirection(Point target, Vector up) {
             camera.vto = target.subtract(camera.location).normalize();
-            camera.vright = camera.vto.crossProduct(camera.vup).normalize();
+            camera.vright = camera.vto.crossProduct(up).normalize();
             camera.vup = camera.vright.crossProduct(camera.vto).normalize();
             return this;
         }
@@ -126,7 +126,7 @@ public class Camera implements Cloneable {
          */
         public Builder setDirection(Point target) {
             camera.vto = target.subtract(camera.location).normalize();
-            camera.vup = new Vector(0, 1, 0);
+            camera.vup = Vector.AXIS_Y;
             camera.vright = camera.vto.crossProduct(camera.vup).normalize();
             camera.vup = camera.vright.crossProduct(camera.vto).normalize();
             return this;

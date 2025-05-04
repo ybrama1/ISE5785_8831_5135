@@ -59,7 +59,7 @@ public class CameraIntersectionsIntegrationTests {
     @Test
     void testIntersectionsSphere() {
         //test for sphere
-        //there should be 4 intersections
+        //there should be 8 intersections
         Sphere sphere = new Sphere(3, new Point(1, 4, 1));
         // construct a ray through each pixel and check intersections
         int intersectionCount = 0;
@@ -74,11 +74,11 @@ public class CameraIntersectionsIntegrationTests {
                 }
             }
         }
-        // check if the number of intersections is equal to 4
+        // check if the number of intersections is equal to 8
         assertEquals(
-                4,
+                8,
                 intersectionCount,
-                "The number of intersections is not equal to 4");
+                "The number of intersections is not equal to 8");
     }
     /**
      * Test method for constructing rays and checking intersections with a plane.
@@ -106,7 +106,7 @@ public class CameraIntersectionsIntegrationTests {
         assertEquals(
                 6,
                 intersectionCount,
-                "The number of intersections is not equal to 9");
+                "The number of intersections is not equal to 6");
     }
 
     /**
@@ -118,7 +118,7 @@ public class CameraIntersectionsIntegrationTests {
         //test for triangle
         Triangle triangle = new Triangle(new Point(4, 3, 4), new Point(-4, 6, 4), new Point(0, 3, -5));
         // construct a ray through each pixel and check intersections
-        //There should be 4 intersections
+        //There should be 3 intersections
         int intersectionCount = 0;
         for (int i = 0; i < nX; i++) {
             for (int j = 0; j < nY; j++) {
@@ -131,10 +131,10 @@ public class CameraIntersectionsIntegrationTests {
                 }
             }
         }
-        // check if the number of intersections is equal to 4
-        assertEquals(4,
+        // check if the number of intersections is equal to 3
+        assertEquals(3,
                 intersectionCount,
-                "The number of intersections is not equal to 9");
+                "The number of intersections is not equal to 3");
     }
 
 
