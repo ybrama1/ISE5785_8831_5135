@@ -49,7 +49,7 @@ public class Camera implements Cloneable {
         if(nX <= 0 || nY <= 0)
             throw new IllegalArgumentException("Invalid pixel coordinates");
 
-        Point pIJ = Point.ZERO;
+        Point pIJ = location;
 
         // calculate the pixel size
         double yI = -(i - (nY - 1) / 2d) * height / nY;
@@ -62,7 +62,8 @@ public class Camera implements Cloneable {
         // we need to move the point in the direction of vTo by distance
         pIJ = pIJ.add(vto.scale(distance));
 
-        return new Ray(Point.ZERO, pIJ.subtract(Point.ZERO).normalize());
+        Vector vIJ = pIJ.subtract(location);
+        return new Ray(location, vIJ);
     }
 
 
