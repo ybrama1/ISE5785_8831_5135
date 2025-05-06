@@ -14,10 +14,10 @@ public class AmbientLight {
     public static final AmbientLight NONE = new AmbientLight(Color.BLACK);
     /**
      * constructor with parameters
-     * @param intensity the intensity of the ambient light
+     * @param La the intensity of the ambient light
      */
-    public AmbientLight(Color intensity) {
-        this.intensity = intensity;
+    public AmbientLight(Color La) {
+        this.intensity = La;
     }
 
     public Color getIntensity() {

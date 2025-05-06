@@ -2,6 +2,8 @@ package primitives;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RayTest {
@@ -67,6 +69,48 @@ class RayTest {
                 new Point(1, 2, 3),
                 r1.getPoint(0),
                 "ERROR: getPoint() for zero distance does not throw an exception");
+    }
+
+    /**
+     * Test method for
+     * {@link primitives.Ray#findClosestPoint(java.util.List)}.
+     */
+    @Test
+    void testFindClosestPoint() {
+        // ============ Equivalence Partitions Tests ==============
+        Ray r1 = new Ray(new Point(1, 2, 3), new Vector(1, 0, 0));
+        // TC01: Test for a closest point in the center of the list
+        // the result should be (2,2,3)
+        assertEquals(
+                new Point(2,2,3),
+                r1.findClosestPoint(
+                        List.of(new Point(3, 2, 3),
+                                new Point(2, 2, 3),
+                                new Point(4, 2, 3))),
+                "ERROR: findClosestPoint() wrong value");
+
+        // =============== Boundary Values Tests ==================
+        // TC11: Test for an empty list
+        // the result should be null
+        assertNull(r1.findClosestPoint(List.of()), "ERROR: findClosestPoint() for itself does not throw an exception");
+        // TC12: Test for the closest point at the beginning of the list
+        // the result should be (2,2,3)
+        assertEquals(
+                new Point(2, 2, 3),
+                r1.findClosestPoint(
+                        List.of(new Point(2, 2, 3),
+                                new Point(3, 2, 3),
+                                new Point(4, 2, 3))),
+                "ERROR: findClosestPoint() wrong value");
+        // TC13: Test for the closest point at the end of the list
+        // the result should be (4,2,3)
+        assertEquals(
+                new Point(2, 2, 3),
+                r1.findClosestPoint(
+                        List.of(new Point(3, 2, 3),
+                                new Point(4, 2, 3),
+                                new Point(2, 2, 3))),
+                "ERROR: findClosestPoint() wrong value");
     }
 
 }

@@ -1,8 +1,10 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Ray;
 import primitives.Vector;
 import primitives.Point;
+import scene.Scene;
 
 import java.util.MissingResourceException;
 
@@ -23,6 +25,14 @@ public class Camera implements Cloneable {
     private double width = 0;
     /*** The height of the view plane.*/
     private double height = 0;
+    /*** The image writer used to write the image to a file.*/
+    ImageWriter imageWriter;
+    /*** The ray tracer used to trace rays in the scene.*/
+    RayTracerBase rayTracer;
+    /*** The x resolution of the image.*/
+    private int nX = 1;
+    /*** The y resolution of the image.*/
+    private int nY = 1;
 
     /**
      * default constructor
@@ -66,7 +76,50 @@ public class Camera implements Cloneable {
         return new Ray(location, vIJ);
     }
 
+    /**
+     * for each pixel in the image, cast a ray and get the color of the pixel
+     * @return the rendered image
+     */
+    public Camera renderImage(){
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                castRay(i,j);
+            }
+        }
+        return this;
+    }
+    /**
+     * Prints a grid on the image.
+     * @param interval the interval between grid lines
+     * @param color the color of the grid lines
+     * @return the camera object
+     */
+    public Camera printGrid(int interval,Color color){
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                if (i % interval == 0 || j % interval == 0) {
+                    imageWriter.writePixel(i, j, color);
+                }
+            }
+        }
+        return this;
+    }
 
+    private void castRay(int nX, int nY){
+        // get the ray from the camera
+        Ray ray = constructRay(this.nX, this.nY, nX, nY);
+        // get the color of the pixel
+        Color color = rayTracer.traceRay(ray);
+        // set the color of the pixel
+        imageWriter.writePixel(nX, nY, color);
+    }
+    /**
+     * Writes the image to a file.
+     * @param filePath the path to the file
+     */
+    public void writeToImage(String filePath) {
+        imageWriter.writeToImage(filePath);
+    }
     /**
      * Builder class for constructing a Camera object.
      * This class provides methods to set the camera's location, view direction,
@@ -170,8 +223,21 @@ public class Camera implements Cloneable {
          * @return copy of the builder instance
          */
         public Builder setResolution(int nX, int nY) {
-            return null;
+            camera.nX = nX;
+            camera.nY = nY;
+            return this;
         }
+
+        public Builder setRayTracer(Scene scene, RayTracerType rayTracerType) {
+            // meanwhile, we will do it just for simple type
+            if (rayTracerType == RayTracerType.SIMPLE) {
+                camera.rayTracer = new SimpleRayTracer(scene);
+            } else {
+                camera.rayTracer = null;
+            }
+            return this;
+        }
+
 
         public Camera build() {
             String errorMessage = "Renderer parameters are missing";
@@ -227,7 +293,17 @@ public class Camera implements Cloneable {
                 throw new IllegalArgumentException("Distance must be positive");
             }
 
+            if (camera.nX <= 0) {
+                throw new IllegalArgumentException("nX must be positive");
+            }
+            if (camera.nY <= 0) {
+                throw new IllegalArgumentException("nY must be positive");
+            }
+            if (camera.rayTracer == null) {
+                camera.rayTracer = new SimpleRayTracer(null);
+            }
             camera.vright = camera.vto.crossProduct(camera.vup).normalize();
+            camera.imageWriter = new ImageWriter(camera.nX, camera.nY);
             try {
                 return (Camera)camera.clone();
             } catch (CloneNotSupportedException e) {
