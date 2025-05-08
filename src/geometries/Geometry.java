@@ -1,4 +1,5 @@
 package geometries;
+import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
@@ -9,7 +10,9 @@ import  primitives.Ray;
  * 3-Dimensional coordinate system.
  * @author Jeshurun and Binyamin
  */
-public abstract class Geometry implements Intersectable {
+public abstract class Geometry extends Intersectable {
+    /***The color of the geometry*/
+    protected Color emission = Color.BLACK;
     /**
      * Abstract function to calculate the normal to the geometry
      * @param point the point on the geometry
@@ -17,6 +20,14 @@ public abstract class Geometry implements Intersectable {
      */
     public abstract Vector getNormal(Point point);
 
+    public Color getEmission() {
+        return emission;
+    }
+    public Geometry setEmission(Color emission) {
+        this.emission = emission;
+        return this;
+    }
+
     @Override
-    public abstract List<Point> findIntersections(Ray ray);
+    public abstract List<Intersection> calculateIntersectionsHelper(Ray ray);
 }
