@@ -92,7 +92,9 @@ class RayTest {
         // =============== Boundary Values Tests ==================
         // TC11: Test for an empty list
         // the result should be null
-        assertNull(r1.findClosestPoint(List.of()), "ERROR: findClosestPoint() for itself does not throw an exception");
+        assertNull(
+                r1.findClosestPoint(List.of()),
+                "ERROR: findClosestPoint() for itself does not throw an exception");
         // TC12: Test for the closest point at the beginning of the list
         // the result should be (2,2,3)
         assertEquals(

@@ -4,6 +4,11 @@ import geometries.Geometries;
 import lighting.AmbientLight;
 import primitives.Color;
 
+/**
+ * Class Scene is the basic class representing a scene in a Cartesian
+ * 3-Dimensional coordinate system.
+ * @author Jeshurun and Binyamin
+ */
 public class Scene {
     /**The name of the scene*/
     public String name;
