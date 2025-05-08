@@ -43,7 +43,7 @@ public class Sphere extends RadialGeometry {
             // The ray starts at the center of the sphere
             return List.of(
                     new Intersection(this,
-                                    dir.scale(radius)));
+                                    p0.add(dir.scale(radius))));
         }
         Vector u = center.subtract(p0); // vector from p0 to the center
         // The distance from p0 to the point that creates right angled triangle with the center, we'ill mark the point as p1
