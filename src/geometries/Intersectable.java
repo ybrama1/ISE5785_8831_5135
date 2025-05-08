@@ -16,8 +16,10 @@ public abstract class Intersectable {
      * @return a list of intersection points, or an empty list if there are no intersections
      */
     public final List<Point> findIntersections(Ray ray) {
-        var list = calculateIntersections(ray);
-        return list == null ? null : list.stream().map(intersection -> intersection.point).toList();
+        var intersections = calculateIntersections(ray);
+        return intersections == null ? null
+                : intersections.stream()
+                .map(intersection -> intersection.point).toList();
     }
 
     public static class Intersection {
