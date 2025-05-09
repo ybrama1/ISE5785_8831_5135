@@ -1,10 +1,8 @@
 package geometries;
-import primitives.Color;
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 
 import java.util.List;
-import  primitives.Ray;
+
 /**
  * Abstract class Geometry is the basic class representing a geometry in Cartesian
  * 3-Dimensional coordinate system.
@@ -13,6 +11,8 @@ import  primitives.Ray;
 public abstract class Geometry extends Intersectable {
     /***The color of the geometry*/
     protected Color emission = Color.BLACK;
+    /***The material of the geometry*/
+    private Material material = new Material();
     /**
      * Abstract function to calculate the normal to the geometry
      * @param point the point on the geometry
@@ -30,4 +30,12 @@ public abstract class Geometry extends Intersectable {
 
     @Override
     public abstract List<Intersection> calculateIntersectionsHelper(Ray ray);
+
+    public Material getMaterial() {
+        return material;
+    }
+    public Geometry setMaterial(Material material) {
+        this.material = material;
+        return this;
+    }
 }

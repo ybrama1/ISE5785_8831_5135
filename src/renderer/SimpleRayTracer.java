@@ -4,6 +4,7 @@ import lighting.AmbientLight;
 import primitives.Color;
 import primitives.Point;
 import primitives.Ray;
+import primitives.Vector;
 import scene.Scene;
 import geometries.Intersectable. Intersection;
 
@@ -42,8 +43,13 @@ public class SimpleRayTracer extends RayTracerBase{
     }
 
     public Color calcColor(Intersection intersection) {
-        return scene.ambientLight.getIntensity()
-                .add(intersection.geometry.getEmission());
+        return scene.ambientLight.getIntensity().scale(intersection.geometry.getMaterial().kA)
+                .add(intersection.geometry.getEmission()
+                );
+    }
+
+    public boolean preprocessIntersection(Intersection intersection, Vector intersectionRay){
+
     }
 
 
