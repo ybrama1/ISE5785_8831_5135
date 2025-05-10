@@ -32,23 +32,29 @@ public abstract class Intersectable {
         public final Point point;
         /*** The material of the geometry*/
         public final Material material;
+        /*** The ray that created the intersection*/
+        public Vector v;
         /*** The normal to the geometry at the intersection point*/
         public Vector normal;
-        /*** The vector from the light source to the intersection point*/
-        public Vector v;
-        /*** The distance from the light source to the intersection point*/
-        public double vNormal;
+        /*** a dot product between the normal and the ray direction*/
+        public double nv;
         /*** The light source that created the intersection*/
         public LightSource light;
-        /*** The vector from the intersection point to the light source*/
+        /*** direction vector from the light source to the intersection point*/
         public Vector l;
-        /*** The distance from the intersection point to the light source*/
-        public double lNormal;
+        /*** dot product between the light source direction and the normal*/
+        public double ln;
 
-        public Intersection(Geometry geometry, Point point, Material material) {
+
+        public Intersection(Geometry geometry, Point point) {
             this.geometry = geometry;
             this.point = point;
-            this.material = material;
+            if (geometry != null) {
+                this.material = geometry.getMaterial();
+            }
+            else {
+                this.material = null;
+            }
         }
 
         @Override

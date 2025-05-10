@@ -41,8 +41,15 @@ public class SpotLight extends PointLight {
     public SpotLight setKq(double kQ) {
         return (SpotLight)super.setKq(kQ);
     }
-
+/**
+     * Set the narrow beam of the light
+     * @param a the angle of the narrow beam
+     * @return this SpotLight object
+     */
     public SpotLight setNarrowBeam(int a){
-        return null;
+        // Set the narrow beam of the light
+        // This is a placeholder implementation
+        // In a real implementation, you would use the angle to calculate the intensity
+        return this;
     }
 }
