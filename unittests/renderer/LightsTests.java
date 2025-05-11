@@ -200,5 +200,45 @@ class LightsTests {
          .renderImage() //
          .writeToImage("lightTrianglesSpotSharp");
    }
+   /** light point position in tests with triangles */
+   private final Point          trianglesLightPosition2 = new Point(20, 80, 25);
+    /** light direction in tests with triangles */
+    private final Vector         trianglesLightDirection2 = new Vector(1, 1, 0);
+    /** light direction in tests with triangles */
+    private final Vector         trianglesLightDirection3 = new Vector(-1, 1, -1);
+    /** Produce a picture of two triangles lighted by some light sources */
+    @Test
+    void trianglesMultiLight() {
+        scene2.geometries.add(triangle1, triangle2);
+        scene2.lights.add(new SpotLight(trianglesLightColor, trianglesLightPosition, trianglesLightDirection) //
+                .setKl(0.01).setKq(0.00004));
+        scene2.lights.add(new PointLight(trianglesLightColor, trianglesLightPosition2) //
+                .setKl(0.001).setKq(0.00004));
+        scene2.lights.add(new DirectionalLight(trianglesLightColor, trianglesLightDirection3));
+
+        camera2.setResolution(500, 500) //
+                .build() //
+                .renderImage() //
+                .writeToImage("lightTrianglesMulti");
+    }
+    /** light point position in tests with sphere */
+    private final Point          sphereLightPosition2    = new Point(50, -80, 25);
+    /** light direction in tests with sphere */
+    private final Vector         sphereLightDirection2   = new Vector(-1, 1, -1);
+    /** Produce a picture of sphere lighted by some light sources */
+    @Test
+    void sphereMultiLight() {
+        scene1.geometries.add(sphere);
+        scene1.lights.add(new SpotLight(sphereLightColor, sphereLightPosition2, sphereLightDirection2) //
+                .setKl(0.01).setKq(0.00004));
+        scene1.lights.add(new PointLight(sphereLightColor, trianglesLightPosition2) //
+                .setKl(0.001).setKq(0.00004));
+        scene1.lights.add(new DirectionalLight(sphereLightColor, sphereLightDirection));
+
+        camera1.setResolution(500, 500) //
+                .build() //
+                .renderImage() //
+                .writeToImage("lightSphereMulti");
+    }
 
 }
