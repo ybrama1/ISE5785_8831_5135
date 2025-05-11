@@ -4,6 +4,10 @@ import primitives.Color;
 import primitives.Ray;
 import scene.Scene;
 
+/**
+ * Abstract class for ray tracing
+ * @author Jeshurun and Binyamin
+ */
 public abstract class RayTracerBase {
     /**The scene to be rendered*/
     protected final Scene scene;

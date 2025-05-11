@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class Scene is the class representing a scene in a 3D environment.
+ * It contains the name of the scene, the background color, the ambient light,
+ * the geometries in the scene, and the lights in the scene.
+ * @author Jeshurun and Binyamin
+ */
 public class Scene {
     /**The name of the scene*/
     public String name;
