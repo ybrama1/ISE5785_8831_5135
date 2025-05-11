@@ -7,6 +7,8 @@ import primitives.Vector;
 public class SpotLight extends PointLight {
     /*** The direction of the light */
     private final Vector direction;
+    /*** The angle of the narrow beam of the light*/
+    private int narrowBeam = 1;
 
     /**
      * Constructor for SpotLight
@@ -20,13 +22,17 @@ public class SpotLight extends PointLight {
     }
     @Override
     public Color getIntensity(Point p) {
-        // Calculate the angle between the light direction and the vector from the light to the point
-        double angle = direction.dotProduct(getL(p));
+        Vector l = getL(p);
+        double angle = direction.dotProduct(l);
+
         if (angle <= 0) {
             return Color.BLACK;
         }
-        // Scale the intensity by the angle
-        return super.getIntensity(p).scale(angle);
+
+        // Apply falloff using the narrowBeam factor
+        double falloff = Math.pow(angle, narrowBeam);
+
+        return super.getIntensity(p).scale(falloff);
     }
     @Override
     public SpotLight setKc(double kC) {
@@ -50,6 +56,8 @@ public class SpotLight extends PointLight {
         // Set the narrow beam of the light
         // This is a placeholder implementation
         // In a real implementation, you would use the angle to calculate the intensity
+
+        this.narrowBeam = a;
         return this;
     }
 }

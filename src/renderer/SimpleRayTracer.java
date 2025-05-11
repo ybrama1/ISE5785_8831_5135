@@ -95,7 +95,6 @@ public class SimpleRayTracer extends RayTracerBase{
      * @return the specular color
      */
     Double3 calcSpecular(Intersection intersection){
-        // Calculate the specular color based on the material properties and the light source
         Vector r = intersection.l
                 .subtract(intersection.normal.scale(2 * intersection.ln));
         return intersection.geometry.getMaterial().kS
@@ -112,7 +111,6 @@ public class SimpleRayTracer extends RayTracerBase{
      * @return the diffusive color
      */
     Double3 calcDiffusive(Intersection intersection){
-        // Calculate the diffusive color based on the material properties and the light source
         return intersection.geometry.getMaterial().kD.scale(abs(intersection.ln));
     }
 }
