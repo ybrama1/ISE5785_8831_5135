@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Geometries {
+public class Geometries extends Intersectable {
     /**
      * List of geometries
      */
@@ -36,16 +36,12 @@ public class Geometries {
         this.geometries.addAll(Arrays.asList(geometry));
     }
 
-    /**
-     * Method to find intersections with a ray
-     * @param ray the ray to check for intersections
-     * @return a list of intersection points, or an empty list if there are no intersections
-     */
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> intersections = new ArrayList<>();
+    @Override
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
+        List<Intersection> intersections = new ArrayList<>();
 
         for (Intersectable geometry : geometries) {
-            List<Point> geometryIntersections = geometry.findIntersections(ray);
+            List<Intersection> geometryIntersections = geometry.calculateIntersectionsHelper(ray);
             if (geometryIntersections != null) {
                 intersections.addAll(geometryIntersections);
             }

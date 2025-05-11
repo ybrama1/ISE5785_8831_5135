@@ -27,7 +27,7 @@ public class Tube extends RadialGeometry {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
         // The tube is infinite, so we need to find the intersection of the ray with the axis
         // and then check if the point is within the radius of the tube
         return null;

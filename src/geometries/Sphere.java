@@ -35,13 +35,15 @@ public class Sphere extends RadialGeometry {
         return normal.normalize();
     }
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    public List<Intersection> calculateIntersectionsHelper(Ray ray) {
         Point p0 = ray.getP0();
         Vector dir = ray.getDir();
 
         if (p0.equals(center)) {
             // The ray starts at the center of the sphere
-            return List.of(p0.add(dir.scale(radius)));
+            return List.of(
+                    new Intersection(this,
+                                    p0.add(dir.scale(radius))));
         }
         Vector u = center.subtract(p0); // vector from p0 to the center
         // The distance from p0 to the point that creates right angled triangle with the center, we'ill mark the point as p1
@@ -58,12 +60,16 @@ public class Sphere extends RadialGeometry {
         double t1 = Util.alignZero( tm - th); // The distance from the head of the ray to the closer intersection
         double t2 = Util.alignZero(tm + th); // The distance from the head of the ray to the further intersection
 
-        List<Point> intersections = new ArrayList<>();
+        List<Intersection> intersections = new ArrayList<>();
         if (t1 > 0) {
-            intersections.add(ray.getPoint(t1));
+            intersections.add(
+                    new Intersection(this,
+                                    ray.getPoint(t1)));
         }
         if (t2 > 0) {
-            intersections.add(ray.getPoint(t2));
+            intersections.add(
+                    new Intersection(this,
+                            ray.getPoint(t2)));
         }
         return intersections.isEmpty() ? null : intersections;
     }

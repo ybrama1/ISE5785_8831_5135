@@ -10,6 +10,11 @@ import java.util.MissingResourceException;
 
 import static primitives.Util.isZero;
 
+/**
+ * Class Camera is the basic class representing a camera in Cartesian
+ * 3-Dimensional coordinate system.
+ * @author Jeshurun and Binyamin
+ */
 public class Camera implements Cloneable {
     /*** The camera's position in 3D space.*/
     private Point location;

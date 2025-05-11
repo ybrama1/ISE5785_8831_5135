@@ -2,11 +2,17 @@ package scene;
 
 import geometries.Geometries;
 import lighting.AmbientLight;
+import lighting.LightSource;
 import primitives.Color;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
- * Class Scene is the basic class representing a scene in a Cartesian
- * 3-Dimensional coordinate system.
+ * Class Scene is the class representing a scene in a 3D environment.
+ * It contains the name of the scene, the background color, the ambient light,
+ * the geometries in the scene, and the lights in the scene.
  * @author Jeshurun and Binyamin
  */
 public class Scene {
@@ -18,6 +24,8 @@ public class Scene {
     public AmbientLight ambientLight = AmbientLight.NONE;
     /**The geometries in the scene*/
     public Geometries geometries = new Geometries();
+    /**The lights in the scene*/
+    public List<LightSource> lights = new LinkedList<>();
 
     /**
      * constructor with the name of the scene
@@ -42,6 +50,10 @@ public class Scene {
     }
     public Scene setGeometries(Geometries geometries) {
         this.geometries = geometries;
+        return this;
+    }
+    public Scene setLights(List<LightSource> lights) {
+        this.lights = lights;
         return this;
     }
 
