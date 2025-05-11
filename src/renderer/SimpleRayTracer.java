@@ -8,7 +8,6 @@ import geometries.Intersectable. Intersection;
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static primitives.Util.alignZero;
-import java.util.List;
 
 /**
  * SimpleRayTracer class that extends RayTracerBase
