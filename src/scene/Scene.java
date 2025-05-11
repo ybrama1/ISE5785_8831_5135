@@ -34,6 +34,7 @@ public class Scene {
         this.name = name;
     }
 
+    //setters
     public scene.Scene setName(String name) {
         this.name = name;
         return this;

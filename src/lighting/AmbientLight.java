@@ -12,10 +12,12 @@ public class AmbientLight extends Light {
     public static final AmbientLight NONE = new AmbientLight(Color.BLACK);
     /**
      * constructor with parameters
-     * @param La the intensity of the ambient light
+     * @param Ia the intensity of the ambient light
      */
-    public AmbientLight(Color La) {
-        super(La);
+
+    public AmbientLight(Color Ia) {
+        super(Ia);
+
     }
 
 }

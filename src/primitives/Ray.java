@@ -61,6 +61,11 @@ public class Ray {
                 && this.dir.equals(other.dir);
     }
 
+      /**
+     * Find the closest point to the ray from a list of points
+     * @param points the list of points
+     * @return the closest point to the ray
+     */
     public Point findClosestPoint(List<Point> points) {
         return points == null
                 ? null

@@ -5,7 +5,8 @@ import primitives.Ray;
 import scene.Scene;
 
 /**
- * Abstract class for ray tracing
+ * RayTracerBase is an abstract class that represents the base for all ray tracers.
+ * It contains the scene to be rendered and the method to trace a ray.
  * @author Jeshurun and Binyamin
  */
 public abstract class RayTracerBase {

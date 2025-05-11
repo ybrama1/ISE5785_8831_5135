@@ -1,18 +1,20 @@
 package renderer;
 
+
 import lighting.LightSource;
 import primitives.*;
 import scene.Scene;
 import geometries.Intersectable. Intersection;
-
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static primitives.Util.alignZero;
+import java.util.List;
 
 /**
  * SimpleRayTracer class that extends RayTracerBase
  * This class is responsible for rendering a scene using ray tracing
  * It calculates the color of each pixel based on the light sources and the geometry in the scene
+
  * @author Jeshurun and Binyamin
  */
 public class SimpleRayTracer extends RayTracerBase{
