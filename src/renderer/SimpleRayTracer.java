@@ -5,6 +5,9 @@ import lighting.LightSource;
 import primitives.*;
 import scene.Scene;
 import geometries.Intersectable. Intersection;
+
+import java.util.List;
+
 import static java.lang.Math.abs;
 import static java.lang.Math.max;
 import static primitives.Util.alignZero;
@@ -17,6 +20,8 @@ import static primitives.Util.alignZero;
  * @author Jeshurun and Binyamin
  */
 public class SimpleRayTracer extends RayTracerBase{
+    /*** The delta value used for shadow calculations*/
+    private static final double DELTA = 0.1;
     /**
      * Constructor for SimpleRayTracer
      * @param scene the scene to be rendered
@@ -55,8 +60,10 @@ public class SimpleRayTracer extends RayTracerBase{
     public boolean preprocessIntersection(Intersection intersection, Vector intersectionRay){
         intersection.v = intersectionRay;
         intersection.normal = intersection.geometry.getNormal(intersection.point);
-        intersection.nv = alignZero(intersection.v
-                .dotProduct(intersection.normal));
+        intersection.nv = alignZero(
+                intersection.v
+                .dotProduct(intersection.normal)
+        );
         return intersection.nv != 0;
     }
     /**
@@ -81,7 +88,7 @@ public class SimpleRayTracer extends RayTracerBase{
         Color color = intersection.geometry.getEmission();
 
         for (LightSource lightSource : scene.lights) {
-            if (setLightSource(intersection, lightSource)) { // sign(nl) == sign(nv)
+            if (setLightSource(intersection, lightSource) && unshaded(intersection)) { // sign(nl) == sign(nv)
                 Color iL = lightSource.getIntensity(intersection.point);
                 color = color.add(
                         iL.scale(calcDiffusive(intersection)
@@ -114,4 +121,25 @@ public class SimpleRayTracer extends RayTracerBase{
     Double3 calcDiffusive(Intersection intersection){
         return intersection.geometry.getMaterial().kD.scale(abs(intersection.ln));
     }
+
+    private boolean unshaded(Intersection intersection){
+        Vector pointToLight = intersection.l.scale(-1); // from point to light source
+        Vector delta = intersection.normal.scale(intersection.ln < 0 ? DELTA : -DELTA);
+        Ray shadowRay = new Ray(intersection.point.add(delta), pointToLight);
+
+        var intersections = scene.geometries.findIntersections(shadowRay);
+        if (intersections == null) {
+            return true;
+        }
+        if (intersections.isEmpty()) {
+            return true;
+        }
+        for (Point i : intersections) {
+            if (i.distance(shadowRay.getP0()) < intersection.light.getDistance(shadowRay.getP0())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

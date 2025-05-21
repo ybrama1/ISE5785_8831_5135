@@ -20,9 +20,10 @@ public abstract class Intersectable {
      */
     public final List<Point> findIntersections(Ray ray) {
         var intersections = calculateIntersections(ray);
-        return intersections == null ? null
+        return intersections == null
+                ? null
                 : intersections.stream()
-                .map(intersection -> intersection.point).toList();
+                    .map(intersection -> intersection.point).toList();
     }
 
     public static class Intersection {

@@ -1,13 +1,13 @@
 package renderer;
 
-import static java.awt.Color.BLUE;
-
 import org.junit.jupiter.api.Test;
 
 import geometries.*;
 import lighting.*;
 import primitives.*;
 import scene.Scene;
+
+import static java.awt.Color.*;
 
 /**
  * Test rendering a basic image
@@ -18,9 +18,9 @@ class LightsTests {
    /** Default constructor to satisfy JavaDoc generator */
    LightsTests() { /* to satisfy JavaDoc generator */ }
 
-   /** First scene for some of tests */
+   /** First scene for some of the tests */
    private final Scene          scene1                  = new Scene("Test scene");
-   /** Second scene for some of tests */
+   /** Second scene for some of the tests */
    private final Scene          scene2                  = new Scene("Test scene")
       .setAmbientLight(new AmbientLight(new Color(38, 38, 38)));
 
@@ -225,15 +225,19 @@ class LightsTests {
     private final Point          sphereLightPosition2    = new Point(50, -80, 25);
     /** light direction in tests with sphere */
     private final Vector         sphereLightDirection2   = new Vector(-1, 1, -1);
-    /** Produce a picture of sphere lighted by some light sources */
+    private final Color          sphereLightColor2        = new Color(RED);
+   private final Color          sphereLightColor3        = new Color(10, 200, 100);
+
+
+   /** Produce a picture of sphere lighted by some light sources */
     @Test
     void sphereMultiLight() {
         scene1.geometries.add(sphere);
-        scene1.lights.add(new SpotLight(sphereLightColor, sphereLightPosition2, sphereLightDirection2) //
-                .setKl(0.01).setKq(0.00004));
+        scene1.lights.add(new SpotLight(sphereLightColor3, sphereLightPosition2, sphereLightDirection2) //
+                .setKl(0.01).setKq(0.00004).setNarrowBeam(3));
         scene1.lights.add(new PointLight(sphereLightColor, trianglesLightPosition2) //
-                .setKl(0.001).setKq(0.00004));
-        scene1.lights.add(new DirectionalLight(sphereLightColor, sphereLightDirection));
+                .setKl(0.01).setKq(0.0004));
+        scene1.lights.add(new DirectionalLight(sphereLightColor2, sphereLightDirection));
 
         camera1.setResolution(500, 500) //
                 .build() //
