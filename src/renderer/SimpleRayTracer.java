@@ -20,8 +20,12 @@ import static primitives.Util.alignZero;
  * @author Jeshurun and Binyamin
  */
 public class SimpleRayTracer extends RayTracerBase{
-    /*** The delta value used for shadow calculations*/
-    private static final double DELTA = 0.1;
+    /*** The maximum number of color levels used for shading*/
+    private static final int MAX_CALC_COLOR_LEVEL = 10;
+    /*** The minimum color level used for shading*/
+    private static final double MIN_CALC_COLOR_K = 0.001;
+    /*** The initial color value used for shading*/
+    private static final Double3 INITIAL_K = Double3.ONE;
     /**
      * Constructor for SimpleRayTracer
      * @param scene the scene to be rendered
@@ -32,10 +36,10 @@ public class SimpleRayTracer extends RayTracerBase{
 
     @Override
     public Color traceRay(Ray ray) {
-        var intersections = scene.geometries.calculateIntersections(ray);
-        return intersections == null
+        Intersection intersection = findClosestIntersection(ray);
+        return intersection == null
                 ? scene.background
-                : calcColor(ray.findClosestIntersection(intersections), ray);
+                : calcColor(intersection, ray);
     }
     /**
      * Calculate the color of the intersection point
@@ -47,10 +51,15 @@ public class SimpleRayTracer extends RayTracerBase{
         if(preprocessIntersection(intersection, ray.getDir())) {
             return scene.ambientLight.getIntensity()
                     .scale(intersection.geometry.getMaterial().kA)
-                    .add(calcColorLocalEffects(intersection));
+                    .add(calcColor(intersection, MAX_CALC_COLOR_LEVEL, INITIAL_K));
         }
         return Color.BLACK;
     }
+    private Color calcColor(Intersection intersection, int level, Double3 k){
+        Color color = calcColorLocalEffects(intersection);
+        return 1 == level ? color : color.add(calcGlobalEffects(intersection, level, k));
+    }
+
     /**
      * Preprocess the intersection point
      * @param intersection the intersection point
@@ -122,24 +131,102 @@ public class SimpleRayTracer extends RayTracerBase{
         return intersection.geometry.getMaterial().kD.scale(abs(intersection.ln));
     }
 
+    /**
+     * Check if the intersection point is unshaded
+     * @param intersection the intersection point
+     * @return true if the intersection point is unshaded, false otherwise
+     */
     private boolean unshaded(Intersection intersection){
         Vector pointToLight = intersection.l.scale(-1); // from point to light source
-        Vector delta = intersection.normal.scale(intersection.ln < 0 ? DELTA : -DELTA);
-        Ray shadowRay = new Ray(intersection.point.add(delta), pointToLight);
+        Ray shadowRay = new Ray(intersection.point, pointToLight, intersection.normal);
 
-        var intersections = scene.geometries.findIntersections(shadowRay);
+        var intersections = scene.geometries.calculateIntersections(shadowRay);
         if (intersections == null) {
             return true;
         }
         if (intersections.isEmpty()) {
             return true;
         }
-        for (Point i : intersections) {
-            if (i.distance(shadowRay.getP0()) < intersection.light.getDistance(shadowRay.getP0())) {
-                return false;
+        for (Intersection i : intersections) {
+            if (i.point.distance(shadowRay.getP0()) < intersection.light.getDistance(shadowRay.getP0())) {
+                return !i.material.kT.lowerThan(MIN_CALC_COLOR_K);
             }
         }
         return true;
+    }
+    /**
+     * Calculate the reflected ray based on the intersection point
+     * @param intersection the intersection point
+     * @return the reflected ray
+     */
+    private Ray calcReflectedRay(Intersection intersection){
+        Vector v = intersection.v;
+        Vector n = intersection.normal;
+        Vector r = v.subtract(n.scale(2 * v.dotProduct(n)));
+
+        return new Ray(intersection.point, r, intersection.normal);
+    }
+    /**
+     * Calculate the refracted ray based on the intersection point
+     * @param intersection the intersection point
+     * @return the refracted ray
+     */
+    private Ray calcTransparentRay(Intersection intersection){
+        return new Ray(intersection.point, intersection.v, intersection.normal);
+    }
+
+    /**
+     * Calculate the global effect of the ray based on the intersection point
+     * @param ray the ray to be traced
+     * @param level the level of recursion
+     * @param k the color of the ray
+     * @param kx the color of the intersection point
+     * @return the color of the global effect
+     */
+    private Color calcGlobalEffect(Ray ray, int level, Double3 k, Double3 kx) {
+        Double3 kkx = k.product(kx);
+        if (kkx.lowerThan(MIN_CALC_COLOR_K)) {
+            return Color.BLACK;
+        }
+        Intersection intersection = findClosestIntersection(ray);
+        if (intersection == null) return scene.background.scale(kx);
+        return preprocessIntersection(intersection, ray.getDir())
+                ? calcColor(intersection, level - 1, kkx).scale(kx)
+                : Color.BLACK;
+    }
+    /**
+     * Calculate the global effects of the ray based on the intersection point
+     * @param intersection the intersection point
+     * @param level the level of recursion
+     * @param k the color of the ray
+     * @return the color of the global effects
+     */
+    private Color calcGlobalEffects(Intersection intersection, int level, Double3 k) {
+        return calcGlobalEffect(
+                calcTransparentRay(intersection),
+                level,
+                k,
+                intersection.material.kT
+        )
+                .add(
+                    calcGlobalEffect(
+                            calcReflectedRay(intersection),
+                            level,
+                            k,
+                            intersection.material.kR
+                    ));
+    }
+    /**
+     * Find the closest intersection point of the ray with the scene
+     * @param ray the ray to be traced
+     * @return the closest intersection point
+     */
+    private Intersection findClosestIntersection(Ray ray){
+        List<Intersection> intersections = scene.geometries.calculateIntersections(ray);
+        if (intersections == null || intersections.isEmpty()) {
+            return null;
+        }
+        return ray.findClosestIntersection(intersections);
     }
 
 }

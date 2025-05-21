@@ -15,6 +15,8 @@ public class Ray {
     /**The direction of the ray*/
     private final Vector dir;
 
+    private final double DELTA = 0.1;
+
     /**
      * constructor creates the ray
      * @param p0 the beginning of the ray
@@ -23,6 +25,20 @@ public class Ray {
     public Ray(Point p0, Vector dir) {
         this.p0 = p0;
         this.dir = dir.normalize();
+    }
+    public Ray(Point p0, Vector dir, Vector normal) {
+        this.dir = dir.normalize();
+        double nv = normal.dotProduct(dir);
+        if (Util.isZero(nv)) {
+            this.p0 = p0;
+        }
+        else if (nv > 0) {
+            this.p0 = p0.add(normal.scale(DELTA));
+        }
+        else {
+            this.p0 = p0.subtract(normal.scale(DELTA));
+        }
+
     }
 
     /**
