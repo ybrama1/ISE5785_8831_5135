@@ -23,7 +23,7 @@ public class Try {
     void colorfulArtExplosion() {
         Random rand = new Random();
 
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 70; i++) {
             // יצירת כדורים אקראיים
             double radius = 10 + rand.nextDouble() * 20;
             Point center = new Point(
@@ -47,7 +47,7 @@ public class Try {
             );
         }
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 50; i++) {
             // יצירת קואורדינטות אקראיות לנקודת התחלה
             double x = rand.nextDouble() * 400 - 200;
             double y = rand.nextDouble() * 400 - 200;
@@ -79,7 +79,7 @@ public class Try {
         // תאורה
         scene.setAmbientLight(new AmbientLight(new Color(30, 30, 30)));
         scene.lights.add(new SpotLight(
-                new Color(500, 400, 400),
+                new Color(RED),
                 new Point(100, 100, 100),
                 new Vector(-1, -1, -2)
         ).setKl(1E-5).setKq(1E-7));
