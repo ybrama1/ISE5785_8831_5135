@@ -107,4 +107,134 @@ class ReflectionRefractionTests {
          .renderImage() //
          .writeToImage("refractionShadow");
    }
+   @Test
+   void colorfulShapesWithLights() {
+      scene.geometries.add(
+              // כדור כחול שקוף למחצה
+              new Sphere(40d, new Point(0, 0, -100))
+                      .setEmission(new Color(BLUE))
+                      .setMaterial(new Material().setKD(0.3).setKS(0.5).setShininess(80).setKT(0.5)),
+
+              // כדור אדום מבריק
+              new Sphere(30d, new Point(-70, 40, -120))
+                      .setEmission(new Color(RED))
+                      .setMaterial(new Material().setKD(0.4).setKS(0.7).setShininess(100)),
+
+              // כדור ירוק מחוספס
+              new Sphere(25d, new Point(60, -50, -90))
+                      .setEmission(new Color(GREEN))
+                      .setMaterial(new Material().setKD(0.7).setKS(0.1).setShininess(10)),
+
+              // משולש זהב
+              new Triangle(new Point(-60, -60, -140), new Point(-20, 0, -140), new Point(-80, 20, -140))
+                      .setEmission(new Color(255, 215, 0))
+                      .setMaterial(new Material().setKD(0.5).setKS(0.5).setShininess(60)),
+
+              // משולש לבן בוהק
+              new Triangle(new Point(20, -40, -130), new Point(80, -30, -130), new Point(50, 30, -130))
+                      .setEmission(new Color(WHITE))
+                      .setMaterial(new Material().setKD(0.3).setKS(0.8).setShininess(120)),
+
+              // משולש שחור שקוף למחצה
+              new Triangle(new Point(-30, 60, -110), new Point(10, 90, -110), new Point(-10, 120, -110))
+                      .setEmission(new Color(BLACK))
+                      .setMaterial(new Material().setKD(0.2).setKS(0.3).setShininess(40).setKT(0.3))
+      );
+
+      scene.setAmbientLight(new AmbientLight(new Color(20, 20, 20)));
+
+      scene.lights.add(
+              new SpotLight(new Color(500, 300, 300), new Point(50, 50, 50), new Vector(-1, -1, -2))
+                      .setKl(1E-5).setKq(1E-7)
+      );
+
+      cameraBuilder
+              .setLocation(new Point(0, 0, 1000))
+              .setDirection(Point.ZERO, Vector.AXIS_Y)
+              .setVpDistance(1000).setVpSize(200, 200)
+              .setResolution(600, 600)
+              .build()
+              .renderImage()
+              .writeToImage("colorfulShapesWithLights");
+   }
+
+   @Test
+   void geometricElephantWithTransparencyAndReflection() {
+      scene.geometries.add(
+              // ראש הפיל – כדור גדול חצי שקוף
+              new Sphere(50d, new Point(0, 0, -150))
+                      .setEmission(new Color(100, 200, 200))
+                      .setMaterial(new Material().setKD(0.4).setKS(0.5).setShininess(100).setKT(0.5)),
+
+              // אוזן שמאל – משולש רפלקטיבי
+              new Triangle(new Point(-90, 20, -160), new Point(-60, 60, -160), new Point(-40, 10, -160))
+                      .setEmission(new Color(250, 250, 0))
+                      .setMaterial(new Material().setKR(0.6).setKD(0.2).setKS(0.4).setShininess(80)),
+
+              // אוזן ימין – משולש רגיל
+              new Triangle(new Point(90, 20, -160), new Point(60, 60, -160), new Point(40, 10, -160))
+                      .setEmission(new Color(250, 250, 0))
+                      .setMaterial(new Material().setKD(0.3).setKS(0.3).setShininess(50)),
+
+              // חדק – שרשרת של 3 כדורים
+              new Sphere(12, new Point(0, -40, -150))
+                      .setEmission(new Color(250, 120, 160))
+                      .setMaterial(new Material().setKD(0.5).setKS(0.3).setShininess(40)),
+              new Sphere(10, new Point(0, -60, -150))
+                      .setEmission(new Color(250, 120, 160))
+                      .setMaterial(new Material().setKD(0.5).setKS(0.3).setShininess(40)),
+              new Sphere(8, new Point(0, -75, -150))
+                      .setEmission(new Color(250, 120, 160))
+                      .setMaterial(new Material().setKD(0.5).setKS(0.3).setShininess(40)),
+
+              // רגליים – 4 כדורים קטנים
+              new Sphere(10, new Point(-30, -80, -150))
+                      .setEmission(new Color(200, 70, 90))
+                      .setMaterial(new Material().setKD(0.4).setKS(0.3).setShininess(20)),
+              new Sphere(10, new Point(30, -80, -150))
+                      .setEmission(new Color(200, 70, 90))
+                      .setMaterial(new Material().setKD(0.4).setKS(0.3).setShininess(20)),
+              new Sphere(10, new Point(-30, -95, -150))
+                      .setEmission(new Color(200, 70, 90))
+                      .setMaterial(new Material().setKD(0.4).setKS(0.3).setShininess(20)),
+              new Sphere(10, new Point(30, -95, -150))
+                      .setEmission(new Color(200, 70, 90))
+                      .setMaterial(new Material().setKD(0.4).setKS(0.3).setShininess(20)),
+
+              // עין שמאל
+              new Sphere(5, new Point(-15, 20, -100))
+                      .setEmission(new Color(BLACK))
+                      .setMaterial(new Material().setKD(0.2).setKS(0.8).setShininess(150)),
+              // עין ימין
+              new Sphere(5, new Point(15, 20, -100))
+                      .setEmission(new Color(BLACK))
+                      .setMaterial(new Material().setKD(0.2).setKS(0.8).setShininess(150))
+      );
+
+      scene.setAmbientLight(new AmbientLight(new Color(30, 30, 30)));
+
+      scene.lights.add(
+              new SpotLight(new Color(60, 40, 40), new Point(70, 100, 50), new Vector(-1, -1, -2))
+                      .setKl(1E-5).setKq(1E-7));
+      scene.lights.add(
+              new SpotLight(new Color(30, 30, 50), new Point(-100, 80, 80), new Vector(1, -1, -2))
+                      .setKl(1E-5).setKq(1E-7));
+        scene.lights.add(
+              new PointLight(new Color(20, 20, 20), new Point(0, 200, 150))
+                      .setKl(1E-5).setKq(1E-7));
+        scene.lights.add(
+              new DirectionalLight(new Color(15, 15, 15), new Vector(-1, -1, -1)));
+
+
+      cameraBuilder
+              .setLocation(new Point(0, 0, 1000))
+              .setDirection(Point.ZERO, Vector.AXIS_Y)
+              .setVpDistance(1000).setVpSize(200, 200)
+              .setResolution(600, 600)
+              .build()
+              .renderImage()
+              .writeToImage("geometricElephant");
+   }
+
+
 }
