@@ -26,6 +26,12 @@ public class Ray {
         this.p0 = p0;
         this.dir = dir.normalize();
     }
+    /**
+     * constructor creates the ray
+     * @param p0 the beginning of the ray
+     * @param dir the direction of the ray
+     * @param normal the normal vector to the surface
+     */
     public Ray(Point p0, Vector dir, Vector normal) {
         this.dir = dir.normalize();
         double nv = normal.dotProduct(dir);
@@ -38,7 +44,6 @@ public class Ray {
         else {
             this.p0 = p0.subtract(normal.scale(DELTA));
         }
-
     }
 
     /**
