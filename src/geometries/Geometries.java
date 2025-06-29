@@ -33,8 +33,14 @@ public class Geometries extends Intersectable {
      * @param geometry the geometry to add
      */
     public void add(Intersectable... geometry) {
-        this.geometries.addAll(Arrays.asList(geometry));
+        this.add(Arrays.asList(geometry));
     }
+
+    /**
+     * Method to add a list of geometries to the list
+     * @param geometries the list of geometries to add
+     */
+    public void add(List<? extends Intersectable> geometries) { this.geometries.addAll(geometries);}
 
     @Override
     public List<Intersection> calculateIntersectionsHelper(Ray ray) {
