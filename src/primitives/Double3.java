@@ -98,4 +98,18 @@ public record Double3(double d1, double d2, double d3) {
      *               triad, false otherwise
      */
     public boolean lowerThan(Double3 other) { return d1 < other.d1 && d2 < other.d2 && d3 < other.d3; }
+
+    /**
+     * Checks whether all the numbers are greater than a test number
+     * @param  i the test number
+     * @return   the specified coordinate
+     */
+    public double getCoordinate(int i) {
+        switch (i) {
+            case 0 -> { return d1; }
+            case 1 -> { return d2; }
+            case 2 -> { return d3; }
+            default -> throw new IllegalArgumentException("Index must be 0, 1, or 2");
+        }
+    }
 }

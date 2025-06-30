@@ -133,6 +133,26 @@ public class Polygon extends Geometry {
         return List.of(new Intersection(this, planeIntersections.getFirst().point));
     }
 
+    @Override
+    public AABB getBoundingBox() {
+        // Calculate the bounding box by finding the min and max coordinates of the vertices
+        double minX = Double.POSITIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY;
+        double minZ = Double.POSITIVE_INFINITY;
+        double maxX = Double.NEGATIVE_INFINITY;
+        double maxY = Double.NEGATIVE_INFINITY;
+        double maxZ = Double.NEGATIVE_INFINITY;
+        for (Point vertex : vertices) {
+            if (vertex.getCoordinate(0) < minX) minX = vertex.getCoordinate(0);
+            if (vertex.getCoordinate(1) < minY) minY = vertex.getCoordinate(1);
+            if (vertex.getCoordinate(2) < minZ) minZ = vertex.getCoordinate(2);
+            if (vertex.getCoordinate(0) > maxX) maxX = vertex.getCoordinate(0);
+            if (vertex.getCoordinate(1) > maxY) maxY = vertex.getCoordinate(1);
+            if (vertex.getCoordinate(2) > maxZ) maxZ = vertex.getCoordinate(2);
+        }
+        return new AABB(new Point(minX, minY, minZ), new Point(maxX, maxY, maxZ));
+    }
+
     /**
      * Retrieves the list of vertices that define the polygon.
      *

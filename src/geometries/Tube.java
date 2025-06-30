@@ -32,6 +32,13 @@ public class Tube extends RadialGeometry {
         // and then check if the point is within the radius of the tube
         return null;
     }
+
+    // if anyone ever want it, have fun with implementing everything
+    @Override
+    public AABB getBoundingBox() {
+        return null;
+    }
+
     @Override
     public Vector getNormal(Point point) {
         // The normal of a tube is the vector from the axis to the point on the tube

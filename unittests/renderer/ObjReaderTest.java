@@ -193,6 +193,7 @@ public class ObjReaderTest {
         ObjReader objReader = new ObjReader();
         String filePath = "C:\\Users\\binyamin\\Downloads\\Amazing Elzing-Amur\\united.obj";
         Geometries obj = objReader.getGeometryFromOBJ(filePath);
+        obj.BVH();
         scene.geometries.add(obj);
         // lights
         scene.setAmbientLight(new AmbientLight(new Color(30, 30, 30)));
@@ -210,6 +211,8 @@ public class ObjReaderTest {
                 .setDirection(new Point(10,-36,20), new Vector(0,0,1))
                 .setVpDistance(1000).setVpSize(500, 500)
                 .setResolution(800, 800)
+                .setMultithreading(-1)
+                .setAntiAliasing(true)
                 .build()
                 .renderImage()
                 .writeToImage("objImage-lowPoly3");

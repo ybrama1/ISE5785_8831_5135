@@ -134,8 +134,7 @@ public class SimpleRayTracer extends RayTracerBase{
      * @return the diffusive color
      */
     Double3 calcDiffusive(Intersection intersection){
-        Double3 diff = intersection.geometry.getMaterial().kD.scale(abs(intersection.ln));
-        return diff;
+        return intersection.geometry.getMaterial().kD.scale(abs(intersection.ln));
     }
 
     /**
