@@ -204,7 +204,7 @@ public class ObjReaderTest {
                         .setKl(1E-4)
         );
         // camera
-        Point CL = new Point(40, -260,  40);
+        Point CL = new Point(80, -260,  150);
         cameraBuilder
                 .setLocation(CL)
                 .setDirection(new Point(10,-36,20), new Vector(0,0,1))
