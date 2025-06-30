@@ -54,7 +54,7 @@ public class CameraIntersectionsIntegrationTests {
 
     /**
      * Test method for constructing rays and checking intersections with a sphere.
-     * {@link renderer.Camera#constructRay(int, int, int, int)}.
+     * {@link renderer.Camera#constructRay(int, int, int, int,double,double)}.
      */
     @Test
     void testIntersectionsSphere() {
@@ -73,7 +73,7 @@ public class CameraIntersectionsIntegrationTests {
 
     /**
      * Test method for constructing rays and checking intersections with a plane.
-     * {@link renderer.Camera#constructRay(int, int, int, int)}.
+     * {@link renderer.Camera#constructRay(int, int, int, int,double,double)}.
      */
     @Test
     void testIntersectionsPlane() {
@@ -91,7 +91,7 @@ public class CameraIntersectionsIntegrationTests {
 
     /**
      * Test method for constructing rays and checking intersections with a triangle.
-     * {@link renderer.Camera#constructRay(int, int, int, int)}.
+     * {@link renderer.Camera#constructRay(int, int, int, int,double,double)}.
      */
     @Test
     void testIntersectionsTriangle() {
