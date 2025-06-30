@@ -38,6 +38,10 @@ public class Camera implements Cloneable {
     private int nX = 1;
     /*** The y resolution of the image.*/
     private int nY = 1;
+    /*** define if uses anti aliasing or not */
+    private boolean antiAliasing = false;
+    /*** define how many rays to cast per pixel for super sampling */
+    private int raysPerPixel = 25;
 
     /**
      * default constructor
@@ -57,9 +61,11 @@ public class Camera implements Cloneable {
      * @param nY the number of pixels in the y direction
      * @param j  the pixel's column index
      * @param i  the pixel's row index
+     * @param shiftX the horizontal shift from the pixel center
+     * @param shiftY the vertical shift from the pixel center
      * @return a ray from the camera through the specified pixel
      */
-    public Ray constructRay(int nX, int nY, int j, int i){
+    public Ray constructRay(int nX, int nY, int j, int i, double shiftX, double shiftY){
         // check if the pixel coordinates are valid
         if(nX <= 0 || nY <= 0)
             throw new IllegalArgumentException("Invalid pixel coordinates");
@@ -70,9 +76,9 @@ public class Camera implements Cloneable {
         double yI = -(i - (nY - 1) / 2d) * height / nY;
         double xJ = (j - (nX - 1) / 2d) * width / nX;
 
-        //check if xJ or yI are not zero, so we will not add zero vector
-        if (!isZero(xJ)) pIJ = pIJ.add(vright.scale(xJ));
-        if (!isZero(yI)) pIJ = pIJ.add(vup.scale(yI));
+        // calculate the point on the view plane the pixel and the shift
+        if (!isZero(xJ+shiftX)) pIJ = pIJ.add(vright.scale(xJ+shiftX));
+        if (!isZero(yI+shiftY)) pIJ = pIJ.add(vup.scale(yI+shiftY));
 
         // we need to move the point in the direction of vTo by distance
         pIJ = pIJ.add(vto.scale(distance));
@@ -88,7 +94,7 @@ public class Camera implements Cloneable {
     public Camera renderImage(){
         for (int i = 0; i < nY; i++) {
             for (int j = 0; j < nX; j++) {
-                castRay(i,j);
+                colorPixel(i,j);
             }
         }
         return this;
@@ -110,14 +116,43 @@ public class Camera implements Cloneable {
         return this;
     }
 
-    private void castRay(int nX, int nY){
+
+    /**
+     * Colors a specific pixel in the image, optionally, uses anti-aliasing.
+     * @param i the row index of the pixel
+     * @param j the column index of the pixel
+     */
+    public void colorPixel(int i, int j){
         // get the ray from the camera
-        Ray ray = constructRay(this.nX, this.nY, nX, nY);
+        Ray ray = constructRay(this.nX, this.nY, i, j, 0.5, 0.5);
         // get the color of the pixel
         Color color = rayTracer.traceRay(ray);
+
+        // if anti-aliasing is not enabled, write the pixel color directly
+        if(!this.antiAliasing) {
+            imageWriter.writePixel(i, j, color);
+            return;
+        }
+
+        //anti-aliasing: super sampling
+        for(int k = 1; k < raysPerPixel; k++) {
+            // get the ray from the camera with random shift
+            double shiftX = Math.random() - 0.5;
+            double shiftY = Math.random() - 0.5;
+            Ray antiAliasingRay = constructRay(this.nX, this.nY, i, j, shiftX, shiftY);
+            // get the color of the pixel
+            Color antiAliasingColor = rayTracer.traceRay(antiAliasingRay);
+            // add the color to the pixel
+            color = color.add(antiAliasingColor);
+        }
+
+        // average the color
+        color = color.scale((double) 1 / raysPerPixel);
+
         // set the color of the pixel
-        imageWriter.writePixel(nX, nY, color);
+        imageWriter.writePixel(i, j, color);
     }
+
     /**
      * Writes the image to a file.
      * @param filePath the path to the file
@@ -243,6 +278,18 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        public Builder setAntiAliasing(boolean antiAliasing) {
+            camera.antiAliasing = antiAliasing;
+            return this;
+        }
+
+        public Builder setRaysPerPixel(int raysPerPixel) {
+            if (raysPerPixel <= 0) {
+                throw new IllegalArgumentException("Rays per pixel must be positive");
+            }
+            camera.raysPerPixel = raysPerPixel;
+            return this;
+        }
 
         public Camera build() {
             String errorMessage = "Renderer parameters are missing";

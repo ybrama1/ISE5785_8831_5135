@@ -187,4 +187,31 @@ public class ObjReaderTest {
                 .renderImage()
                 .writeToImage("objImage-lowPoly2");
     }
+
+    @Test
+    public void lowPolyConvertTest3(){
+        ObjReader objReader = new ObjReader();
+        String filePath = "C:\\Users\\binyamin\\Downloads\\Amazing Elzing-Amur\\united.obj";
+        Geometries obj = objReader.getGeometryFromOBJ(filePath);
+        scene.geometries.add(obj);
+        // lights
+        scene.setAmbientLight(new AmbientLight(new Color(30, 30, 30)));
+        Point SLL = new Point(30, -300, 60);
+        scene.lights.add(new PointLight(
+                        new Color(WHITE),
+                        SLL
+                ).setKc(0.9)
+                        .setKl(1E-4)
+        );
+        // camera
+        Point CL = new Point(40, -260,  40);
+        cameraBuilder
+                .setLocation(CL)
+                .setDirection(new Point(10,-36,20), new Vector(0,0,1))
+                .setVpDistance(1000).setVpSize(500, 500)
+                .setResolution(800, 800)
+                .build()
+                .renderImage()
+                .writeToImage("objImage-lowPoly3");
+    }
 }

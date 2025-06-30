@@ -8,4 +8,5 @@ public enum RayTracerType {
    SIMPLE,
    /** Ray tracer using regular grid */
    GRID
+
 }

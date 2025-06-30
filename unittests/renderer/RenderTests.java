@@ -51,7 +51,34 @@ class RenderTests {
          .writeToImage("Two color render test");
    }
 
-   // For stage 6 - please disregard in stage 5
+   /**
+    * test one of the previous tests but with anti-aliasing enabled
+    */
+    @Test
+    void renderTwoColorAntiAliasingTest() {
+       Scene scene = new Scene("Two color").setBackground(new Color(75, 127, 90))
+               .setAmbientLight(new AmbientLight(new Color(255, 191, 191)));
+       scene.geometries //
+               .add(// center
+                       new Sphere(50d, new Point(0, 0, -100)),
+                       // up left
+                       new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)),
+                       // down left
+                       new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)),
+                       // down right
+                       new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100)));
+
+       camera //
+               .setRayTracer(scene, RayTracerType.SIMPLE) //
+               .setResolution(500, 500) //
+               .setAntiAliasing(true) //
+               .build() //
+               .renderImage() //
+               .printGrid(50, new Color(YELLOW)) //
+               .writeToImage("Two color anti-aliasing render test");
+    }
+
+
    /**
     * Produce a scene with basic 3D model - including individual lights of the
     * bodies and render it into a png image with a grid
