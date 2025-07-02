@@ -185,7 +185,7 @@ public class Camera implements Cloneable {
      */
     public void colorPixel(int i, int j){
         // get the ray from the camera
-        Ray ray = constructRay(this.nX, this.nY, i, j, 0.5, 0.5);
+        Ray ray = constructRay(this.nX, this.nY, i, j, 0, 0);
         // get the color of the pixel
         Color color = rayTracer.traceRay(ray);
 
