@@ -16,6 +16,9 @@ import static primitives.Util.isZero;
  * @author Jeshurun and Binyamin
  */
 public class Camera implements Cloneable {
+    private boolean isAntiAliasing = false;
+    /*** The standard anti-aliasing level.*/
+    private static final int ANTI_ALIASING_STANDARD = 30;
     /*** The camera's position in 3D space.*/
     private Point location;
     /*** The camera's orientation in 3D space.*/
@@ -45,11 +48,36 @@ public class Camera implements Cloneable {
     private Camera(){}
 
 
+
+
     public static Builder getBuilder() {
         return new Builder();
     }
 
+    /**
+     * Constructs a ray from the camera through a pixel on the view plane.
+     *
+     * @param nX      the number of pixels in the x direction
+     * @param nY      the number of pixels in the y direction
+     * @param j       the pixel's column index
+     * @param i       the pixel's row index
+     * @param shiftx  horizontal shift for anti-aliasing
+     * @param shifty  vertical shift for anti-aliasing
+     * @return a ray from the camera through the specified pixel
+     */
+    public Ray constructRay(int nX, int nY, int j, int i, double shiftx, double shifty){
+        Point pIJ = location;
+        double yI = ((double) (nY-1)/2-i)*this.height/nY + shifty * this.height/nY;
+        double xJ = (j-((double) (nX-1)/2))*this.width/nX + shiftx * this.width/nX;
 
+        if (!isZero(xJ)) pIJ = pIJ.add(this.vright.scale(xJ));
+        if (!isZero(yI)) pIJ = pIJ.add(this.vup.scale(yI));
+
+        pIJ = pIJ.add(vto.scale(distance));
+
+        Vector vIJ = pIJ.subtract(location);
+        return new Ray(location, vIJ);
+    }
     /**
      * Constructs a ray from the camera through a pixel on the view plane.
      *
@@ -110,13 +138,21 @@ public class Camera implements Cloneable {
         return this;
     }
 
-    private void castRay(int nX, int nY){
-        // get the ray from the camera
-        Ray ray = constructRay(this.nX, this.nY, nX, nY);
-        // get the color of the pixel
-        Color color = rayTracer.traceRay(ray);
-        // set the color of the pixel
-        imageWriter.writePixel(nX, nY, color);
+    private void castRay (int j, int i) {
+        Ray ray = constructRay(nX, nY, j, i);
+        Color color = rayTracer.traceRay(ray); // Default color for the pixel
+        Color final_color = color; // Final color after averaging
+        //double col_diff = 0;
+        if (isAntiAliasing) {
+            int I = 1;
+            for (; I < ANTI_ALIASING_STANDARD; I++) {// adding the randomized points in the pixel
+                ray = constructRay(nX, nY, j, i, Math.random() - 0.5, Math.random() - 0.5);
+                color = rayTracer.traceRay(ray);
+                final_color = final_color.add(color);
+            }
+            final_color = final_color.scale((double) 1 / I);// Average the color
+        }
+        imageWriter.writePixel(j, i, final_color);
     }
     /**
      * Writes the image to a file.
@@ -240,6 +276,11 @@ public class Camera implements Cloneable {
             } else {
                 camera.rayTracer = null;
             }
+            return this;
+        }
+
+        public Builder setAntiAliasing(boolean antiAliasing) {
+            camera.isAntiAliasing = antiAliasing;
             return this;
         }
 

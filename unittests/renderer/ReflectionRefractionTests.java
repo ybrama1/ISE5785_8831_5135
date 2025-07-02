@@ -150,6 +150,16 @@ class ReflectionRefractionTests {
               .build()
               .renderImage()
               .writeToImage("colorfulShapesWithLights");
+      cameraBuilder
+              .setAntiAliasing(true)
+              .setLocation(new Point(0, 0, 1000))
+              .setDirection(Point.ZERO, Vector.AXIS_Y)
+              .setVpDistance(1000).setVpSize(200, 200)
+              .setResolution(600, 600)
+              .build()
+              .renderImage()
+              .writeToImage("colorfulShapesWithLights2");
+
    }
 
    @Test

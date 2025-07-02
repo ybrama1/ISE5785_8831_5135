@@ -99,7 +99,7 @@ public class SimpleRayTracer extends RayTracerBase{
 
         for (LightSource lightSource : scene.lights) {
             if (setLightSource(intersection, lightSource)){ // sign(nl) == sign(nv)
-                Double3 ktr = transparency(intersection);
+                Double3 ktr = transparency(intersection); // check if the intersection is unshaded
                 if (!ktr.product(k).lowerThan(MIN_CALC_COLOR_K)) {
                     Color iL = lightSource.getIntensity(intersection.point).scale(ktr);
                     color = color.add(
@@ -110,6 +110,7 @@ public class SimpleRayTracer extends RayTracerBase{
         }
         return color;
     }
+
     /**
      * Calculate the specular color based on the material properties and the light source
      * @param intersection the intersection point
