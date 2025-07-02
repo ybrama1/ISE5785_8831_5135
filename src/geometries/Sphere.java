@@ -74,4 +74,13 @@ public class Sphere extends RadialGeometry {
         return intersections.isEmpty() ? null : intersections;
     }
 
+    @Override
+    public AABB getBoundingBox() {
+        // The bounding box of a sphere is a cube with the center at the center of the sphere and the side length equal to the diameter of the sphere
+        double halfSide = radius;
+        Point min = center.add(new Vector(-halfSide, -halfSide, -halfSide));
+        Point max = center.add(new Vector(halfSide, halfSide, halfSide));
+        return new AABB(min, max);
+    }
+
 }

@@ -1,6 +1,8 @@
 package primitives;
 
 public class Material {
+    public static final Material DEFAULT = new Material();
+
     /*** The ambient light coefficient*/
     public Double3 kA = Double3.ONE;
     /*** The diffuse light coefficient*/

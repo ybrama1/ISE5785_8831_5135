@@ -114,7 +114,8 @@ class ShadowTests {
             .setKl(4E-4).setKq(2E-5));
 
       camera//
-         .setResolution(600, 600) //
+         .setResolution(600, 600)
+         .setAntiAliasing(true)
          .build() //
          .renderImage() //
          .writeToImage("shadowTrianglesSphere");

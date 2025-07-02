@@ -6,7 +6,9 @@ import primitives.Vector;
 import primitives.Point;
 import scene.Scene;
 
+import java.util.LinkedList;
 import java.util.MissingResourceException;
+import java.util.stream.*;
 
 import static primitives.Util.isZero;
 
@@ -16,9 +18,6 @@ import static primitives.Util.isZero;
  * @author Jeshurun and Binyamin
  */
 public class Camera implements Cloneable {
-    private boolean isAntiAliasing = false;
-    /*** The standard anti-aliasing level.*/
-    private static final int ANTI_ALIASING_STANDARD = 30;
     /*** The camera's position in 3D space.*/
     private Point location;
     /*** The camera's orientation in 3D space.*/
@@ -41,6 +40,30 @@ public class Camera implements Cloneable {
     private int nX = 1;
     /*** The y resolution of the image.*/
     private int nY = 1;
+    /*** define if uses anti aliasing or not */
+    private boolean antiAliasing = false;
+    /*** define how many rays to cast per pixel for super sampling */
+    private int raysPerPixel = 25;
+    /** Amount of threads to use fore rendering image by the camera */
+    private int threadsCount = 0;
+    /**
+     * Amount of threads to spare for Java VM threads:<br>
+     * Spare threads if trying to use all the cores
+     */
+    private static final int SPARE_THREADS = 2;
+    /**
+     * Debug print interval in seconds (for progress percentage)<br>
+     * if it is zero - there is no progress output
+     */
+    private double printInterval = 1;
+    /**
+     * Pixel manager for supporting:
+     * <ul>
+     * <li>multi-threading</li>
+     * <li>debug print of progress percentage in Console window/tab</li>
+     * </ul>
+     */
+    private PixelManager pixelManager;
 
     /**
      * default constructor
@@ -48,36 +71,49 @@ public class Camera implements Cloneable {
     private Camera(){}
 
 
-
-
     public static Builder getBuilder() {
         return new Builder();
     }
 
     /**
-     * Constructs a ray from the camera through a pixel on the view plane.
-     *
-     * @param nX      the number of pixels in the x direction
-     * @param nY      the number of pixels in the y direction
-     * @param j       the pixel's column index
-     * @param i       the pixel's row index
-     * @param shiftx  horizontal shift for anti-aliasing
-     * @param shifty  vertical shift for anti-aliasing
-     * @return a ray from the camera through the specified pixel
+     * Render image using multi-threading by parallel streaming
+     * @return the camera object itself
      */
-    public Ray constructRay(int nX, int nY, int j, int i, double shiftx, double shifty){
-        Point pIJ = location;
-        double yI = ((double) (nY-1)/2-i)*this.height/nY + shifty * this.height/nY;
-        double xJ = (j-((double) (nX-1)/2))*this.width/nX + shiftx * this.width/nX;
-
-        if (!isZero(xJ)) pIJ = pIJ.add(this.vright.scale(xJ));
-        if (!isZero(yI)) pIJ = pIJ.add(this.vup.scale(yI));
-
-        pIJ = pIJ.add(vto.scale(distance));
-
-        Vector vIJ = pIJ.subtract(location);
-        return new Ray(location, vIJ);
+    private Camera renderImageStream() {
+        IntStream.range(0, nY).parallel()
+                .forEach(i -> IntStream.range(0, nX).parallel()
+                        .forEach(j -> colorPixel(j, i)));
+        return this;
     }
+    /**
+     * Render image without multi-threading
+     * @return the camera object itself
+     */
+    private Camera renderImageNoThreads() {
+        for (int i = 0; i < nY; ++i)
+            for (int j = 0; j < nX; ++j)
+                colorPixel(j, i);
+        return this;
+    }
+    /**
+     * Render image using multi-threading by creating and running raw threads
+     * @return the camera object itself
+     */
+    private Camera renderImageRawThreads() {
+        var threads = new LinkedList<Thread>();
+        while (threadsCount-- > 0)
+            threads.add(new Thread(() -> {
+                PixelManager.Pixel pixel;
+                while ((pixel = pixelManager.nextPixel()) != null)
+                    colorPixel(pixel.col(), pixel.row());
+            }));
+        for (var thread : threads) thread.start();
+        try {
+            for (var thread : threads) thread.join();
+        } catch (InterruptedException ignored) {}
+        return this;
+    }
+
     /**
      * Constructs a ray from the camera through a pixel on the view plane.
      *
@@ -85,9 +121,11 @@ public class Camera implements Cloneable {
      * @param nY the number of pixels in the y direction
      * @param j  the pixel's column index
      * @param i  the pixel's row index
+     * @param shiftX the horizontal shift from the pixel center
+     * @param shiftY the vertical shift from the pixel center
      * @return a ray from the camera through the specified pixel
      */
-    public Ray constructRay(int nX, int nY, int j, int i){
+    public Ray constructRay(int nX, int nY, int j, int i, double shiftX, double shiftY){
         // check if the pixel coordinates are valid
         if(nX <= 0 || nY <= 0)
             throw new IllegalArgumentException("Invalid pixel coordinates");
@@ -98,9 +136,9 @@ public class Camera implements Cloneable {
         double yI = -(i - (nY - 1) / 2d) * height / nY;
         double xJ = (j - (nX - 1) / 2d) * width / nX;
 
-        //check if xJ or yI are not zero, so we will not add zero vector
-        if (!isZero(xJ)) pIJ = pIJ.add(vright.scale(xJ));
-        if (!isZero(yI)) pIJ = pIJ.add(vup.scale(yI));
+        // calculate the point on the view plane the pixel and the shift
+        if (!isZero(xJ+shiftX)) pIJ = pIJ.add(vright.scale(xJ+shiftX));
+        if (!isZero(yI+shiftY)) pIJ = pIJ.add(vup.scale(yI+shiftY));
 
         // we need to move the point in the direction of vTo by distance
         pIJ = pIJ.add(vto.scale(distance));
@@ -109,18 +147,19 @@ public class Camera implements Cloneable {
         return new Ray(location, vIJ);
     }
 
-    /**
-     * for each pixel in the image, cast a ray and get the color of the pixel
-     * @return the rendered image
+    /** This function renders image's pixel color map from the scene
+     * included in the ray tracer object
+     * @return the camera object itself
      */
-    public Camera renderImage(){
-        for (int i = 0; i < nY; i++) {
-            for (int j = 0; j < nX; j++) {
-                castRay(i,j);
-            }
-        }
-        return this;
+    public Camera renderImage() {
+        pixelManager = new PixelManager(nY, nX, printInterval);
+        return switch (threadsCount) {
+            case 0 -> renderImageNoThreads();
+            case -1 -> renderImageStream();
+            default -> renderImageRawThreads();
+        };
     }
+    
     /**
      * Prints a grid on the image.
      * @param interval the interval between grid lines
@@ -138,22 +177,45 @@ public class Camera implements Cloneable {
         return this;
     }
 
-    private void castRay (int j, int i) {
-        Ray ray = constructRay(nX, nY, j, i);
-        Color color = rayTracer.traceRay(ray); // Default color for the pixel
-        Color final_color = color; // Final color after averaging
-        //double col_diff = 0;
-        if (isAntiAliasing) {
-            int I = 1;
-            for (; I < ANTI_ALIASING_STANDARD; I++) {// adding the randomized points in the pixel
-                ray = constructRay(nX, nY, j, i, Math.random() - 0.5, Math.random() - 0.5);
-                color = rayTracer.traceRay(ray);
-                final_color = final_color.add(color);
-            }
-            final_color = final_color.scale((double) 1 / I);// Average the color
+
+    /**
+     * Colors a specific pixel in the image, optionally, uses anti-aliasing.
+     * @param i the row index of the pixel
+     * @param j the column index of the pixel
+     */
+    public void colorPixel(int i, int j){
+        // get the ray from the camera
+        Ray ray = constructRay(this.nX, this.nY, i, j, 0.5, 0.5);
+        // get the color of the pixel
+        Color color = rayTracer.traceRay(ray);
+
+        // if anti-aliasing is not enabled, write the pixel color directly
+        if(!this.antiAliasing) {
+            imageWriter.writePixel(i, j, color);
+            pixelManager.pixelDone();
+            return;
         }
-        imageWriter.writePixel(j, i, final_color);
+
+        //anti-aliasing: super sampling
+        for(int k = 1; k < raysPerPixel; k++) {
+            // get the ray from the camera with random shift
+            double shiftX = Math.random() - 0.5;
+            double shiftY = Math.random() - 0.5;
+            Ray antiAliasingRay = constructRay(this.nX, this.nY, i, j, shiftX, shiftY);
+            // get the color of the pixel
+            Color antiAliasingColor = rayTracer.traceRay(antiAliasingRay);
+            // add the color to the pixel
+            color = color.add(antiAliasingColor);
+        }
+
+        // average the color
+        color = color.scale((double) 1 / raysPerPixel);
+
+        // set the color of the pixel
+        imageWriter.writePixel(i, j, color);
+        pixelManager.pixelDone();
     }
+
     /**
      * Writes the image to a file.
      * @param filePath the path to the file
@@ -280,10 +342,50 @@ public class Camera implements Cloneable {
         }
 
         public Builder setAntiAliasing(boolean antiAliasing) {
-            camera.isAntiAliasing = antiAliasing;
+            camera.antiAliasing = antiAliasing;
             return this;
         }
 
+        /**
+         * Set multi-threading <br>
+         * Parameter value meaning:
+         * <ul>
+         * <li>-2 - number of threads is number of logical processors less 2</li>
+         * <li>-1 - stream processing parallelization (implicit multi-threading) is used</li>
+         * <li>0 - multi-threading is not activated</li>
+         * <li>1 and more - literally number of threads</li>
+         * </ul>
+         * @param threads number of threads
+         * @return builder object itself
+         */
+        public Builder setMultithreading(int threads) {
+            if (threads < -3)
+                throw new IllegalArgumentException("Multithreading parameter must be -2 or higher");
+            if (threads == -2) {
+                int cores = Runtime.getRuntime().availableProcessors() - SPARE_THREADS;
+                camera.threadsCount = cores <= 2 ? 1 : cores;
+            } else
+                camera.threadsCount = threads;
+            return this;
+        }
+        /**
+         * Set debug printing interval. If it's zero - there won't be printing at all
+         * @param interval printing interval in %
+         * @return builder object itself
+         */
+        public Builder setDebugPrint(double interval) {
+            if (interval < 0) throw new IllegalArgumentException("interval parameter must be non-negative");
+            camera.printInterval = interval;
+            return this;
+        }
+
+        public Builder setRaysPerPixel(int raysPerPixel) {
+            if (raysPerPixel <= 0) {
+                throw new IllegalArgumentException("Rays per pixel must be positive");
+            }
+            camera.raysPerPixel = raysPerPixel;
+            return this;
+        }
 
         public Camera build() {
             String errorMessage = "Renderer parameters are missing";

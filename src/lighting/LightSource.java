@@ -13,10 +13,10 @@ public interface LightSource {
      */
     Color getIntensity(Point p);
     /**
-     * Get the distance from the light source to a given point
+     * Get the direction vector from the light source to the point
      *
      * @param p the point to get the distance to
-     * @return the distance from the light source to the given point
+     * @return the direction from the light source to the given point
      */
     Vector getL(Point p);
 

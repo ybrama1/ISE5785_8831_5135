@@ -31,6 +31,9 @@ public abstract class Geometry extends Intersectable {
     @Override
     public abstract List<Intersection> calculateIntersectionsHelper(Ray ray);
 
+    @Override
+    public abstract AABB getBoundingBox();
+
     public Material getMaterial() {
         return material;
     }

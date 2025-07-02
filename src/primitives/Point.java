@@ -29,6 +29,10 @@ public class Point{
         this.xyz = xyz;
     }
 
+    public double getCoordinate(int i) {
+        return xyz.getCoordinate(i);
+    }
+
     /**
      * Vector subtraction
      * @param subtrahend second point
@@ -82,5 +86,6 @@ public class Point{
     public String toString(){
         return xyz.toString();
     }
+
 
 }

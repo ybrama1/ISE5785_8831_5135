@@ -117,8 +117,10 @@ public class SimpleRayTracer extends RayTracerBase{
      * @return the specular color
      */
     Double3 calcSpecular(Intersection intersection){
-        Vector r = intersection.l
-                .subtract(intersection.normal.scale(2 * intersection.ln));
+        Vector r = intersection.l;
+        if(intersection.ln != 0){
+            r = r.subtract(intersection.normal.scale(2 * intersection.ln));
+        }
         return intersection.geometry.getMaterial().kS
                 .scale(
                         Math.pow(

@@ -26,6 +26,7 @@ public abstract class Intersectable {
                     .map(intersection -> intersection.point).toList();
     }
 
+
     public static class Intersection {
         /*** The geometry that was intersected*/
         public final Geometry geometry;
@@ -86,4 +87,11 @@ public abstract class Intersectable {
     public final List<Intersection> calculateIntersections(Ray ray) {
          return calculateIntersectionsHelper(ray);
     }
+
+    /**
+     * Gets the bounding box of the geometry.
+     * @return the bounding box of the geometry
+     */
+    protected abstract AABB getBoundingBox();
+
 }

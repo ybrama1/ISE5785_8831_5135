@@ -70,4 +70,12 @@ public class Plane extends Geometry {
         Intersection intersection = new Intersection(this, ray.getPoint(t));
         return List.of(intersection);
     }
+
+    @Override
+    public AABB getBoundingBox() {
+        // A plane is infinite in two dimensions, so its bounding box is infinite
+        // We can return a bounding box that covers the entire space
+        return new AABB(new Point(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY),
+                        new Point(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY));
+    }
 }

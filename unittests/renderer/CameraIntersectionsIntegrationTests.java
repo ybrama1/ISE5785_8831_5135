@@ -54,7 +54,7 @@ public class CameraIntersectionsIntegrationTests {
 
     /**
      * Test method for constructing rays and checking intersections with a sphere.
-     * {@link renderer.Camera#constructRay(int, int, int, int)}.
+     * {@link renderer.Camera#constructRay(int, int, int, int,double,double)}.
      */
     @Test
     void testIntersectionsSphere() {
@@ -73,7 +73,7 @@ public class CameraIntersectionsIntegrationTests {
 
     /**
      * Test method for constructing rays and checking intersections with a plane.
-     * {@link renderer.Camera#constructRay(int, int, int, int)}.
+     * {@link renderer.Camera#constructRay(int, int, int, int,double,double)}.
      */
     @Test
     void testIntersectionsPlane() {
@@ -91,7 +91,7 @@ public class CameraIntersectionsIntegrationTests {
 
     /**
      * Test method for constructing rays and checking intersections with a triangle.
-     * {@link renderer.Camera#constructRay(int, int, int, int)}.
+     * {@link renderer.Camera#constructRay(int, int, int, int,double,double)}.
      */
     @Test
     void testIntersectionsTriangle() {
@@ -111,7 +111,7 @@ public class CameraIntersectionsIntegrationTests {
         for (int i = 0; i < nX; i++) {
             for (int j = 0; j < nY; j++) {
                 // construct a ray through the pixel
-                Ray ray = camera.constructRay(nX, nY, i, j);
+                Ray ray = camera.constructRay(nX, nY, i, j, 0.5, 0.5);
                 // check if the ray intersects with the triangle
                 List<Point> intersections = geometry.findIntersections(ray);
                 if (intersections != null) {
