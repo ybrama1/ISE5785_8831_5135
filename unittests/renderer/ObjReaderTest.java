@@ -1,9 +1,6 @@
 package renderer;
 
-import geometries.Geometries;
-import geometries.Geometry;
-import geometries.Polygon;
-import geometries.Triangle;
+import geometries.*;
 import lighting.AmbientLight;
 import lighting.PointLight;
 import lighting.SpotLight;
@@ -16,8 +13,7 @@ import scene.Scene;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.awt.Color.RED;
-import static java.awt.Color.WHITE;
+import static java.awt.Color.*;
 
 public class ObjReaderTest {
 
@@ -189,12 +185,27 @@ public class ObjReaderTest {
     }
 
     @Test
-    public void lowPolyConvertTest3(){
+    public void DiscWorld(){
         ObjReader objReader = new ObjReader();
-        String filePath = "C:\\Users\\binyamin\\Downloads\\Amazing Elzing-Amur\\united.obj";
+        String filePath = "unittests\\renderer\\united.obj";
         Geometries obj = objReader.getGeometryFromOBJ(filePath);
         obj.BVH();
         scene.geometries.add(obj);
+        //add spheres in distance like stars
+        Geometries spheres = new Geometries();
+        for (int i = 0; i < 300; i++) {
+            int offset = 20000;
+            double x = Math.random() * offset * 2 - offset/2 * 2;
+            double y = Math.random() * offset - offset/2;
+            double z = Math.random() * offset - offset/2;
+            spheres.add(new Sphere(
+                    50,
+                    new Point(x, y, z).add(new Vector(-110,214,-110).scale(170))
+            ).setEmission(new Color(255,255,255)));
+        }
+        spheres.BVH();
+        scene.geometries.add(spheres);
+        scene.geometries.BVH();
         // lights
         scene.setAmbientLight(new AmbientLight(new Color(30, 30, 30)));
         Point SLL = new Point(30, -300, 60);
@@ -204,17 +215,29 @@ public class ObjReaderTest {
                 ).setKc(0.9)
                         .setKl(1E-4)
         );
+        Point SLL2 = new Point(0, 100, 150);
+        scene.lights.add(new SpotLight(
+                new Color(WHITE),
+                SLL2,
+                Point.ZERO.subtract(SLL2)
+        ));
+        Point SLL3 = new Point(0, -100, 200);
+        scene.lights.add(new SpotLight(
+                new Color(YELLOW),
+                SLL3,
+                Point.ZERO.subtract(SLL3)
+        ));
         // camera
-        Point CL = new Point(80, -260,  150);
+        Point CL = new Point(120, -250,  150);
         cameraBuilder
                 .setLocation(CL)
-                .setDirection(new Point(10,-36,20), new Vector(0,0,1))
-                .setVpDistance(1000).setVpSize(500, 500)
-                .setResolution(800, 800)
+                .setDirection(new Point(10,-36,40), new Vector(0,0,1))
+                .setVpDistance(1000).setVpSize(900, 500)
+                .setResolution(1980, 1080)
                 .setMultithreading(-1)
                 .setAntiAliasing(true)
                 .build()
                 .renderImage()
-                .writeToImage("objImage-lowPoly3");
+                .writeToImage("DiscWorld");
     }
 }
