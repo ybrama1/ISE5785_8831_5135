@@ -1,5 +1,6 @@
 package geometries;
 
+import primitives.AABB;
 import primitives.Point;
 import primitives.Ray;
 
@@ -21,8 +22,12 @@ public class BVHNode extends Intersectable {
     public BVHNode(List<Intersectable> objects) {
         this(objects, 0, objects.size());
         //run on the tree and count the number of objects(not nodes)
-        System.out.println("Number of objects in BVH: " + countObjects());
+        //System.out.println("Number of objects in BVH: " + countObjects());
 
+    }
+
+    public BVHNode(Geometries geometries){
+        this(geometries.geometries);
     }
 
     public int countObjects() {
@@ -138,8 +143,8 @@ public class BVHNode extends Intersectable {
             AABB boxA = a.getBoundingBox();
             AABB boxB = b.getBoundingBox();
 
-            double centerA = (boxA.min.getCoordinate(axis) + boxA.max.getCoordinate(axis)) / 2;
-            double centerB = (boxB.min.getCoordinate(axis) + boxB.max.getCoordinate(axis)) / 2;
+            double centerA = (boxA.getMin().getCoordinate(axis) + boxA.getMax().getCoordinate(axis)) / 2;
+            double centerB = (boxB.getMin().getCoordinate(axis) + boxB.getMax().getCoordinate(axis)) / 2;
 
             return Double.compare(centerA, centerB);
         };

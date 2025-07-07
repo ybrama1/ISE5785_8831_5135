@@ -1,7 +1,7 @@
 package geometries;
 
+import primitives.AABB;
 import primitives.Ray;
-import primitives.Point;
 
 import java.util.ArrayList;
 import java.util.Arrays;

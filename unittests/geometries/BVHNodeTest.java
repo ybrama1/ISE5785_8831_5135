@@ -4,10 +4,7 @@ import lighting.AmbientLight;
 import lighting.PointLight;
 import lighting.SpotLight;
 import org.junit.jupiter.api.Test;
-import primitives.Color;
-import primitives.Material;
-import primitives.Point;
-import primitives.Vector;
+import primitives.*;
 import renderer.Camera;
 import renderer.ObjReader;
 import renderer.RayTracerType;
@@ -24,7 +21,27 @@ public class BVHNodeTest {
     private final Camera.Builder cameraBuilder = Camera.getBuilder()     //
             .setRayTracer(scene, RayTracerType.SIMPLE);
 
-    //simple test with 10 objects and lights
+
+    /**
+     * Test for getBoundingBox method
+     * @link geometries.BVHNode#getBoundingBox()
+     */
+    @Test
+    public void getBoundingBoxTest() {
+        Geometries geometries = new Geometries();
+        geometries.add(new Sphere(1, new Point(0, 0, 0)));
+        geometries.add(new Sphere(2, new Point(3, 4, 5)));
+        geometries.add(new Triangle(new Point(-1, -1, -1), new Point(1, 0, 1), new Point(2, 2, 2)));
+
+        BVHNode bvhNode = new BVHNode(geometries);
+        AABB boundingBox = bvhNode.getBoundingBox();
+
+        // Check if the bounding box is correct
+        assert boundingBox.getMin().equals(new Point(-1, -1, -1));
+        assert boundingBox.getMax().equals(new Point(5, 6, 7));
+    }
+
+
     @Test
     public void lowPolyConvertTest1() {
         List<Geometry> triangles = new ArrayList<>();

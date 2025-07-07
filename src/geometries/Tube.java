@@ -1,5 +1,6 @@
 package geometries;
 
+import primitives.AABB;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;

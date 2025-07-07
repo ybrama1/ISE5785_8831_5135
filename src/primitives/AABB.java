@@ -1,19 +1,25 @@
-package geometries;
-
-import primitives.Point;
-import primitives.Ray;
+package primitives;
 
 // The class implements an Axis-Aligned Bounding Box (AABB) in 3D space.
 // An AABB is defined by two points: the minimum point (min) and the maximum point (max).
 public class AABB{
-    public Point min;
-    public Point max;
+    private final Point min;
+    private final Point max;
 
 
     public AABB(Point min, Point max) {
         this.min = min;
         this.max = max;
     }
+
+    //getters
+    public Point getMin() {
+        return min;
+    }
+    public Point getMax() {
+        return max;
+    }
+
 
     /**
      * Checks if a ray intersects with the AABB.
