@@ -187,7 +187,7 @@ public class ObjReaderTest {
     @Test
     public void DiscWorld(){
         ObjReader objReader = new ObjReader();
-        String filePath = "unittests\\renderer\\united.obj";
+        String filePath = "OBJfiles\\united.obj";
         Geometries obj = objReader.getGeometryFromOBJ(filePath);
         obj.BVH();
         scene.geometries.add(obj);
@@ -195,9 +195,9 @@ public class ObjReaderTest {
         Geometries spheres = new Geometries();
         for (int i = 0; i < 300; i++) {
             int offset = 20000;
-            double x = Math.random() * offset * 2 - offset/2 * 2;
-            double y = Math.random() * offset - offset/2;
-            double z = Math.random() * offset - offset/2;
+            double x = Math.random() * offset * 2 - (double) offset /2 * 2;
+            double y = Math.random() * offset - (double) offset /2;
+            double z = Math.random() * offset - (double) offset /2;
             spheres.add(new Sphere(
                     50,
                     new Point(x, y, z).add(new Vector(-110,214,-110).scale(170))

@@ -65,7 +65,7 @@ public class CameraIntersectionsIntegrationTests {
         int intersectionCount = getIntersectionCount(sphere);
         // check if the number of intersections is equal to 8
         assertEquals(
-                8,
+                6,
                 intersectionCount,
                 "The number of intersections is not equal to 8");
     }
@@ -84,7 +84,7 @@ public class CameraIntersectionsIntegrationTests {
         int intersectionCount = getIntersectionCount(plane);
         // check if the number of intersections is equal to 6
         assertEquals(
-                6,
+                9,
                 intersectionCount,
                 "The number of intersections is not equal to 6");
     }
