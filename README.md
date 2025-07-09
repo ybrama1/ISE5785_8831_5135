@@ -1,3 +1,6 @@
+
+![img_1.png](img_1.png)
+
 # 3D Ray Tracing Engine
 
 A comprehensive 3D ray tracing rendering engine implemented in Java, capable of generating photorealistic images with advanced lighting, shadows, reflections, and refractions.
